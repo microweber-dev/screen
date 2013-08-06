@@ -23,6 +23,19 @@ You can render any link as image by passig it as url parameter
 
 `shot.php?url=http%3A%2F%2Fwww.reddit.com%2Fr%2Fphp`
 
+Demo
+====
+Main file http://screen.microweber.com/
+
+Screenshot from api http://screen.microweber.com/shot.php?url=http%3A%2F%2Fwww.reddit.com%2Fr%2Fphp
+
+
+
+Dependencies
+=====
+ * FontConfig must be installed -  `apt-get/yum install fontconfig`
+ * FreeType is also required - `apt-get/yum install freetype*`
+
 
 
  

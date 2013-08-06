@@ -2,13 +2,13 @@
 $cache_life = 30; //caching time, in seconds
 
 if (!isset($_REQUEST['url'])) {
-    exit(1);
+    exit();
 }
 $url = $_REQUEST['url'];
 
 $url = trim(urldecode($url));
 if ($url == '') {
-    exit(2);
+    exit();
 }
 
 if (!stristr($url, 'http://') and !stristr($url, 'https://')) {
@@ -18,7 +18,7 @@ if (!stristr($url, 'http://') and !stristr($url, 'https://')) {
 
 $url_segs = parse_url($url);
 if (!isset($url_segs['host'])) {
-    exit(3);
+    exit();
 }
 
 
@@ -49,15 +49,21 @@ $refresh = true;
 }
 }
 
+$w = 1024;
+$h = 768;
+if (isset($_REQUEST['w'])) {
+  $w = intval($_REQUEST['w']);  
+}
 
-
-
-
+if (isset($_REQUEST['h'])) {
+  $h = intval($_REQUEST['h']);  
+}
 
 if (!is_file($cache_job) or $refresh == true) {
     $src = "
 
 var page = require('webpage').create();
+page.viewportSize = { width: {$w}, height: {$h} };
 page.open('{$url}', function () {
     page.render('{$screen_file}');
     phantom.exit();
@@ -95,8 +101,4 @@ if (is_file($cache_job)) {
 
 
 
-
-
- var_dump($exec);
-
-?>
+ 

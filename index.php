@@ -10,7 +10,7 @@
 <body>
 <form target="shot"  action="shot.php"   method="post">
 	<fieldset>
-		<legend>Screen</legend>
+		<legend>Take a screenshot</legend>
 		<div class="form-group">
 			<label for="url">URL for screenshot</label>
 			<input type="text" class="form-control" name="url" placeholder="Enter URL">
