@@ -29,6 +29,11 @@ Main file http://screen.microweber.com/
 
 Screenshot from api http://screen.microweber.com/shot.php?url=http%3A%2F%2Fwww.reddit.com%2Fr%2Fphp
 
+You can also set width and height, for example if you want to test how a page looks on small resolution. 
+http://screen.microweber.com/shot.php?url=m.facebook.com&w=300&h=100
+
+
+
 
 
 Dependencies

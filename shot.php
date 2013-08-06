@@ -1,5 +1,5 @@
 <?php
-$cache_life = 30; //caching time, in seconds
+$cache_life = 60; //caching time, in seconds
 
 if (!isset($_REQUEST['url'])) {
     exit();
@@ -35,9 +35,17 @@ if (!is_dir($cache)) {
 
 
 
+$w = 1024;
+$h = 768;
+if (isset($_REQUEST['w'])) {
+  $w = intval($_REQUEST['w']);  
+}
 
+if (isset($_REQUEST['h'])) {
+  $h = intval($_REQUEST['h']);  
+}
 
-$screen_file = $url_segs['host'] . crc32($url) . '.jpg';
+$screen_file = $url_segs['host'] . crc32($url) .'_'.$w.'_'.$h.'.jpg';
 $cache_job = $cache . $screen_file;
 
 
@@ -49,21 +57,15 @@ $refresh = true;
 }
 }
 
-$w = 1024;
-$h = 768;
-if (isset($_REQUEST['w'])) {
-  $w = intval($_REQUEST['w']);  
-}
 
-if (isset($_REQUEST['h'])) {
-  $h = intval($_REQUEST['h']);  
-}
 
 if (!is_file($cache_job) or $refresh == true) {
     $src = "
 
 var page = require('webpage').create();
+ 
 page.viewportSize = { width: {$w}, height: {$h} };
+
 page.open('{$url}', function () {
     page.render('{$screen_file}');
     phantom.exit();
