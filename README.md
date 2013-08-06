@@ -19,13 +19,13 @@ API
 
 You can directly render the taken screen-shot with the `shot.php` file
 
-You can render any link as image by passig it as url parameter
+You can render any link as image by passing it as url parameter
 
 `shot.php?url=google.com`
 
 Demo
 ====
-Main file http://screen.microweber.com/
+Interface http://screen.microweber.com/
 
 Screenshot from api http://screen.microweber.com/shot.php?url=http%3A%2F%2Fwww.reddit.com%2Fr%2Fphp
 
