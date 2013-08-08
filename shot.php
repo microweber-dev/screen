@@ -26,11 +26,16 @@ $here = dirname(__FILE__) . DIRECTORY_SEPARATOR;
 $bin_files = $here . 'bin' . DIRECTORY_SEPARATOR;
 $jobs = $here . 'jobs' . DIRECTORY_SEPARATOR;
 $cache = $here . 'cache' . DIRECTORY_SEPARATOR;
+
 if (!is_dir($jobs)) {
     mkdir($jobs);
+	file_put_contents($jobs.'index.php', '<?php exit(); ?>');
+
 }
 if (!is_dir($cache)) {
     mkdir($cache);
+	file_put_contents($jobs.'index.php', '<?php exit(); ?>');
+
 }
 
 
