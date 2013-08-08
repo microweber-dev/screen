@@ -57,7 +57,7 @@ $refresh = true;
 }
 }
 
-
+$url = strip_tags($url);
 
 if (!is_file($cache_job) or $refresh == true) {
     $src = "

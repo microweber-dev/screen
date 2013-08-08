@@ -3,7 +3,7 @@ Screen
 
 Web site screenshot tool based on PHP and [PhanotomJS](http://phantomjs.org/ "")
 
-You can use it to take screenshots for resting or monitoring service
+You can use it to take screenshots for testing or monitoring service
 
 Usage
 ======
