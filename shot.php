@@ -34,7 +34,7 @@ if (!is_dir($jobs)) {
 }
 if (!is_dir($cache)) {
     mkdir($cache);
-	file_put_contents($jobs.'index.php', '<?php exit(); ?>');
+	file_put_contents($cache.'index.php', '<?php exit(); ?>');
 
 }
 
