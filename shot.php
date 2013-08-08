@@ -49,7 +49,9 @@ if (isset($_REQUEST['w'])) {
 if (isset($_REQUEST['h'])) {
   $h = intval($_REQUEST['h']);  
 }
-
+$url = strip_tags($url);
+$url = str_replace(';', '',$url);
+$url = str_replace('<?', '',$url);
 $screen_file = $url_segs['host'] . crc32($url) .'_'.$w.'_'.$h.'.jpg';
 $cache_job = $cache . $screen_file;
 
@@ -62,7 +64,6 @@ $refresh = true;
 }
 }
 
-$url = strip_tags($url);
 
 if (!is_file($cache_job) or $refresh == true) {
     $src = "
