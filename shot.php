@@ -54,6 +54,12 @@ $url = str_replace(';', '',$url);
 $url = str_replace('"', '',$url);
 $url = str_replace('\'', '',$url);
 $url = str_replace('<?', '',$url);
+$url = str_replace('<?', '',$url);
+$url = str_replace('\077', ' ', $url);
+$url = str_replace('|', ' ', $url);
+//$url = escapeshellarg($url);
+
+
 $screen_file = $url_segs['host'] . crc32($url) .'_'.$w.'_'.$h.'.jpg';
 $cache_job = $cache . $screen_file;
 
@@ -67,6 +73,8 @@ $refresh = true;
 }
 
 
+$url = escapeshellcmd($url);
+ 
 if (!is_file($cache_job) or $refresh == true) {
     $src = "
 
@@ -86,9 +94,11 @@ page.open('{$url}', function () {
 
     $exec = $bin_files . 'phantomjs ' . $job_file;
 
-
+$escaped_command = escapeshellcmd($exec);
+ 
+exec($escaped_command);
     //var_dump($here.$screen_file);
-    exec($exec);
+  //  exec($exec);
 
     if (is_file($here . $screen_file)) {
         rename($here . $screen_file, $cache_job);
