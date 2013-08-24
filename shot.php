@@ -49,6 +49,15 @@ if (isset($_REQUEST['w'])) {
 if (isset($_REQUEST['h'])) {
   $h = intval($_REQUEST['h']);  
 }
+
+if (isset($_REQUEST['clipw'])) {
+  $clipw = intval($_REQUEST['clipw']);
+}
+
+if (isset($_REQUEST['cliph'])) {
+  $cliph = intval($_REQUEST['cliph']);
+}
+
 $url = strip_tags($url);
 $url = str_replace(';', '',$url);
 $url = str_replace('"', '',$url);
@@ -81,6 +90,14 @@ if (!is_file($cache_job) or $refresh == true) {
 var page = require('webpage').create();
  
 page.viewportSize = { width: {$w}, height: {$h} };
+
+";
+
+if (isset($clipw) && isset($cliph)) {
+    $src .= "page.clipRect = { top: 0, left: 0, width: {$clipw}, height: {$cliph} };";
+}
+
+$src .= "
 
 page.open('{$url}', function () {
     page.render('{$screen_file}');
