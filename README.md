@@ -23,6 +23,13 @@ You can render any link as image by passing it as url parameter
 
 `shot.php?url=google.com`
 
+You can specify height and width:
+`shot.php?url=google.com&w=300&h=100`
+
+If you want to crop/clip the screen shot, you can do so like this:
+`shot.php?url=google.com&w=800&h=600&clipw=800&cliph=600`
+
+
 Demo
 ====
 Interface http://screen.microweber.com/
