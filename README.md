@@ -5,6 +5,7 @@ Web site screenshot tool based on PHP and [PhanotomJS](http://phantomjs.org/ "")
 
 You can use it to take screenshots for testing or monitoring service
 
+
 Usage
 ======
 
@@ -19,7 +20,7 @@ API
 
 You can directly render the taken screen-shot with the `shot.php` file
 
-You can render any link as image by passing it as url parameter
+You can render any link by passing it as `url` parameter
 
 `shot.php?url=google.com`
 
@@ -28,6 +29,11 @@ You can specify height and width:
 
 If you want to crop/clip the screen shot, you can do so like this:
 `shot.php?url=google.com&w=800&h=600&clipw=800&cliph=600`
+
+To download the image, just go to `shot.php?url=google.com&download=true`
+
+ 
+
 
 
 Demo
@@ -51,6 +57,6 @@ Dependencies
 
 Thanks
 ====
-Thanks to the [PhanotomJS](http://phantomjs.org/ "") guys for creating their awesome WebKit scripting interface.
+Thanks to the [PhanotomJS](http://phantomjs.org/ "Headless browser") guys for creating their awesome WebKit scripting interface.
 
- 
+This tool was originally created to take screenshots for [Microweber](http://microweber.com/ "open source cms")
