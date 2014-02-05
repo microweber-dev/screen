@@ -1,10 +1,15 @@
 <?php
 $cache_life = 60; //caching time, in seconds
+$tmp = '/tmp/';	  // Where to write data. NOTE: /tmp/ is a bad idea
 $download = false;
 if (!isset($_REQUEST['url'])) {
     exit();
 }
 $url = $_REQUEST['url'];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+	$postdata = file_get_contents("php://input");
+}
 
 $url = trim(urldecode($url));
 if ($url == '') {
@@ -23,8 +28,8 @@ if (!isset($url_segs['host'])) {
 
 $here = dirname(__FILE__) . DIRECTORY_SEPARATOR;
 $bin_files = $here . 'bin' . DIRECTORY_SEPARATOR;
-$jobs = $here . 'jobs' . DIRECTORY_SEPARATOR;
-$cache = $here . 'cache' . DIRECTORY_SEPARATOR;
+$jobs = $tmp . 'jobs' . DIRECTORY_SEPARATOR;
+$cache = $tmp . 'cache' . DIRECTORY_SEPARATOR;
 
 if (!is_dir($jobs)) {
     mkdir($jobs);
@@ -97,15 +102,35 @@ if (!is_file($cache_job) or $refresh == true) {
         $src .= "page.clipRect = { top: 0, left: 0, width: {$clipw}, height: {$cliph} };";
     }
 
-    $src .= "
+	if(!isset($postdata)) {
+		//GET
+		$src .= "
 
-    page.open('{$url}', function () {
-        page.render('{$screen_file}');
-        phantom.exit();
-    });
+		page.open('{$url}', function () {
+			page.render('{$cache_job}');
+			phantom.exit();
+		});
 
+	";
+	} else {
+		// POST
 
-    ";
+		$ct = $_SERVER["CONTENT_TYPE"];
+		$src .= "
+		
+		var data = '{$postdata}';
+		
+		page.customHeaders = {
+		'Content-Type': '{$ct}'
+		};
+		
+		page.open('{$url}', 'POST', data, function () {
+			page.render('{$cache_job}');
+			phantom.exit();
+		});
+
+	";
+	}
 
     $job_file = $jobs . $url_segs['host'] . crc32($src) . '.js';
     file_put_contents($job_file, $src);
@@ -116,9 +141,6 @@ if (!is_file($cache_job) or $refresh == true) {
 
     exec($escaped_command);
 
-    if (is_file($here . $screen_file)) {
-        rename($here . $screen_file, $cache_job);
-    }
 }
 
 
@@ -128,7 +150,7 @@ if (is_file($cache_job)) {
         $file_name=basename($file);
         $type = 'image/jpeg';
         header("Content-disposition: attachment; filename={$file_name}");
-        header("Content-type: {$type}");
+        header("Content-Type: {$type}");
         readfile($file);
     } else {
         $file = $cache_job;
@@ -141,8 +163,3 @@ if (is_file($cache_job)) {
 
 }
 
-
-
-
-
- 
