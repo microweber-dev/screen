@@ -14,6 +14,7 @@
 		<div class="form-group">
 			<label for="url">URL for screenshot</label>
 			<input type="text" class="form-control" name="url" placeholder="Enter URL">
+
 		</div>
 		<button type="submit" class="btn btn-default">Submit</button>
 	</fieldset>

@@ -12,7 +12,8 @@ if ($url == '') {
 }
 
 if (!stristr($url, 'http://') and !stristr($url, 'https://')) {
-    $url = 'http://' . $url;
+   $url = 'http://' . $url;
+
 }
 
 $url_segs = parse_url($url);
@@ -40,6 +41,7 @@ if (!is_dir($cache)) {
 
 $w = 1024;
 $h = 768;
+
 if (isset($_REQUEST['w'])) {
     $w = intval($_REQUEST['w']);
 }
