@@ -1,7 +1,7 @@
 Screen
 ======
 
-Web site screenshot tool based on PHP and [PhanotomJS](http://phantomjs.org/ "")
+Web site screenshot tool based on PHP and [PhantomJS](http://phantomjs.org/ "")
 
 You can use it to take screenshots for testing or monitoring service
 
