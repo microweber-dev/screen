@@ -41,6 +41,6 @@ Dependencies
 
 Thanks
 ====
-Thanks to the [PhanotomJS](http://phantomjs.org/ "Headless browser") guys for creating their awesome WebKit scripting interface.
+Thanks to the [PhantomJS](http://phantomjs.org/ "Headless browser") guys for creating their awesome WebKit scripting interface.
 
 This tool was originally created to take screenshots for [Microweber](http://microweber.com/ "open source cms")
