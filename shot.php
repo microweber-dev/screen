@@ -41,6 +41,10 @@ if (!is_dir($cache)) {
 
 $w = 1024;
 $h = 768;
+$t = '';
+$l = '';
+$b = '#fff';
+$f = 'image/jpeg';
 
 if (isset($_REQUEST['w'])) {
     $w = intval($_REQUEST['w']);
@@ -58,6 +62,34 @@ if (isset($_REQUEST['cliph'])) {
     $cliph = intval($_REQUEST['cliph']);
 }
 
+if (isset($_REQUEST['top'])) {
+    $t = intval($_REQUEST['top']);
+}
+
+if (isset($_REQUEST['left'])) {
+    $l = intval($_REQUEST['left']);
+}
+
+if (isset($_REQUEST['bg'])) {
+    $b = '#' . $_REQUEST['bg'];
+}
+
+if (isset($_REQUEST['format'])) {
+    switch ($_REQUEST['format']) {
+        case 'jpg':
+            $f = 'image/jpeg';
+            break;
+
+        case 'png':
+            $f = 'image/png';
+            break;
+
+        default:
+            $f = 'image/jpeg';
+            break;
+    }
+}
+
 if (isset($_REQUEST['download'])) {
     $download = $_REQUEST['download'];
 }
@@ -71,7 +103,7 @@ $url = str_replace('<?', '', $url);
 $url = str_replace('\077', ' ', $url);
 
 
-$screen_file = $url_segs['host'] . crc32($url) . '_' . $w . '_' . $h . '.jpg';
+$screen_file = $url_segs['host'] . crc32($url) . '_' . $w . '_' . $h . ($f == 'image/png' ? '.png' : '.jpg');
 $cache_job = $cache . $screen_file;
 
 
@@ -96,18 +128,47 @@ if (!is_file($cache_job) or $refresh == true) {
     ";
 
     if (isset($clipw) && isset($cliph)) {
-        $src .= "page.clipRect = { top: 0, left: 0, width: {$clipw}, height: {$cliph} };";
+     if($t !== '') {
+          $src .= "page.clipRect = { top: {$t}, width: {$clipw}, height: {$cliph} };";
+     } elseif($l !== '') {
+          $src .= "page.clipRect = { left: {$l}, width: {$clipw}, height: {$cliph} };";
+     } elseif($t !== '' && $l !== '') {
+          $src .= "page.clipRect = { top: {$t}, left: {$l}, width: {$clipw}, height: {$cliph} };";
+     } else {
+          $src .= "page.clipRect = { width: {$clipw}, height: {$cliph} };";
+     }
     }
 
-    $src .= "
+    if($f == 'image/jpeg') {
+        $src .= "
 
-    page.open('{$url}', function () {
-        page.render('{$screen_file}');
-        phantom.exit();
-    });
+        page.open('{$url}', function () {
+            page.evaluate(function(w, h, b) {
+              $('body').css('width', w + 'px');
+              $('body').css('height', h + 'px');
+              $('body').css('backgroundColor', b);
+            }, {$w}, {$h}, '{$b}');
+            page.render('{$screen_file}');
+            phantom.exit();
+        });
 
 
-    ";
+        ";
+    } else {
+        $src .= "
+
+        page.open('{$url}', function () {
+            page.evaluate(function(w, h) {
+              $('body').css('width', w + 'px');
+              $('body').css('height', h + 'px');
+            }, {$w}, {$h});
+            page.render('{$screen_file}');
+            phantom.exit();
+        });
+
+
+        ";
+    }
 
     $job_file = $jobs . $url_segs['host'] . crc32($src) . '.js';
     file_put_contents($job_file, $src);
@@ -128,23 +189,13 @@ if (is_file($cache_job)) {
     if ($download != false) {
         $file = $cache_job;
         $file_name=basename($file);
-        $type = 'image/jpeg';
         header("Content-disposition: attachment; filename={$file_name}");
-        header("Content-type: {$type}");
+        header("Content-type: {$f}");
         readfile($file);
     } else {
         $file = $cache_job;
-        $type = 'image/jpeg';
-        header('Content-Type:' . $type);
-        header('Content-Length: ' . filesize($file));
+        header("Content-Type: {$f}");
+        header("Content-Length: " . filesize($file));
         readfile($file);
     }
-
-
 }
-
-
-
-
-
- 
