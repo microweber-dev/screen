@@ -43,6 +43,7 @@ $w = 1024;
 $h = 768;
 $t = '';
 $l = '';
+$b = '#fff';
 
 if (isset($_REQUEST['w'])) {
     $w = intval($_REQUEST['w']);
@@ -66,6 +67,10 @@ if (isset($_REQUEST['top'])) {
 
 if (isset($_REQUEST['left'])) {
     $l = intval($_REQUEST['left']);
+}
+
+if (isset($_REQUEST['bg'])) {
+    $b = '#' . $_REQUEST['bg'];
 }
 
 if (isset($_REQUEST['download'])) {
@@ -120,11 +125,11 @@ if (!is_file($cache_job) or $refresh == true) {
     $src .= "
 
     page.open('{$url}', function () {
-  page.evaluate(function(w, h) {
-    $('body').css('width', w + 'px');
+        page.evaluate(function(w, h, b) {
+          $('body').css('width', w + 'px');
           $('body').css('height', h + 'px');
-          $('body').css('backgroundColor', '#fff');
-        }, {$w}, {$h});
+          $('body').css('backgroundColor', b);
+        }, {$w}, {$h}, '{$b}');
         page.render('{$screen_file}');
         phantom.exit();
     });
