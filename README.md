@@ -1,7 +1,7 @@
 Screen
 ======
 
-Web site screenshot tool based on PHP and [PhanotomJS](http://phantomjs.org/ "")
+Web site screenshot tool based on PHP and [PhantomJS](http://phantomjs.org/ "")
 
 You can use it to take screenshots for testing or monitoring service
 
@@ -33,22 +33,6 @@ If you want to crop/clip the screen shot, you can do so like this:
 To download the image, just go to `shot.php?url=google.com&download=true`
 
  
-
-
-
-Demo
-====
-Interface http://screen.microweber.com/
-
-Screenshot from api http://screen.microweber.com/shot.php?url=http%3A%2F%2Fwww.reddit.com%2Fr%2Fphp
-
-You can also set width and height, for example if you want to test how a page looks on small resolution. 
-http://screen.microweber.com/shot.php?url=m.facebook.com&w=300&h=100
-
-
-
-
-
 Dependencies
 =====
  * FontConfig must be installed -  `apt-get/yum install fontconfig`
@@ -57,6 +41,6 @@ Dependencies
 
 Thanks
 ====
-Thanks to the [PhanotomJS](http://phantomjs.org/ "Headless browser") guys for creating their awesome WebKit scripting interface.
+Thanks to the [PhantomJS](http://phantomjs.org/ "Headless browser") guys for creating their awesome WebKit scripting interface.
 
 This tool was originally created to take screenshots for [Microweber](http://microweber.com/ "open source cms")

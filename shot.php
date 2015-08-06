@@ -5,6 +5,11 @@ if (!isset($_REQUEST['url'])) {
     exit();
 }
 $url = $_REQUEST['url'];
+$delay=0;
+if(!empty($_REQUEST['delay'])){
+    $delay=intval($_REQUEST['delay']); //Convert to int
+}
+
 
 $url = trim(urldecode($url));
 if ($url == '') {
@@ -102,10 +107,15 @@ if (!is_file($cache_job) or $refresh == true) {
     $src .= "
 
     page.open('{$url}', function () {
-        page.render('{$screen_file}');
-        phantom.exit();
+        time_delay({$delay});
     });
 
+    function time_delay($) {
+          setTimeout(function() {
+                  page.render('{$screen_file}');
+                  phantom.exit();
+          }, {$delay});
+      };
 
     ";
 
@@ -142,9 +152,3 @@ if (is_file($cache_job)) {
 
 
 }
-
-
-
-
-
- 
