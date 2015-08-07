@@ -42,6 +42,10 @@ Dependencies
  * FreeType is also required - `apt-get/yum install freetype*`
 
 
+Github page
+=====
+[screen](http://codex8.github.io/screen/)
+
 Thanks
 ====
 Thanks to the [PhantomJS](http://phantomjs.org/ "Headless browser") guys for creating their awesome WebKit scripting interface.
