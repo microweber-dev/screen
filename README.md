@@ -32,6 +32,9 @@ If you want to crop/clip the screen shot, you can do so like this:
 
 To download the image, just go to `shot.php?url=google.com&download=true`
 
+DEMO
+=====
+[websscreenshot](http://websscreenshot.herokuapp.com/)
  
 Dependencies
 =====
