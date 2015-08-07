@@ -32,12 +32,19 @@ If you want to crop/clip the screen shot, you can do so like this:
 
 To download the image, just go to `shot.php?url=google.com&download=true`
 
+DEMO
+=====
+[websscreenshot](http://websscreenshot.herokuapp.com/)
  
 Dependencies
 =====
  * FontConfig must be installed -  `apt-get/yum install fontconfig`
  * FreeType is also required - `apt-get/yum install freetype*`
 
+
+Github page
+=====
+[screen](http://codex8.github.io/screen/)
 
 Thanks
 ====
