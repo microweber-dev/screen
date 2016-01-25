@@ -1,2 +1,7 @@
-cache
-jobs
+.idea/
+
+vendor/
+#composer.lock
+jobs/*.js
+
+/test.jpg

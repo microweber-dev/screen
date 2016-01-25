@@ -1,0 +1,34 @@
+{
+  "name": "microweber/screen",
+  "description": "A PHP Class to interact with PhantomJs an capture screenshot of a webpage",
+  "keywords": [
+    "phantomjs",
+    "screen",
+    "capture",
+    "print-screen"
+  ],
+  "license": "BSD",
+  "authors": [
+    {
+      "name": "Peter Ivanov",
+      "email": "peter@microweber.com",
+      "homepage": "http://microweber.com"
+    },
+    {
+      "name": "André Filipe",
+      "email": "andre.r.flip@gmail.com",
+      "homepage": "http://masnathan.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Screen\\": "src/"
+    }
+  },
+  "require": {
+    "php": ">=5.3"
+  },
+  "require-dev": {
+    "symfony/var-dumper": "~2.6"
+  }
+}
