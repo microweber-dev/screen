@@ -1,5 +1,5 @@
 {
-  "name": "screen/screen",
+  "name": "microweber/screen",
   "description": "A PHP Class to interact with PhantomJs an capture screenshot of a webpage",
   "keywords": [
     "phantomjs",
@@ -10,10 +10,14 @@
   "license": "BSD",
   "authors": [
     {
+      "name": "Peter Ivanov",
+      "email": "peter@microweber.com",
+      "homepage": "http://microweber.com"
+    },
+    {
       "name": "André Filipe",
       "email": "andre.r.flip@gmail.com",
-      "homepage": "http://masnathan.com",
-      "role": "Developer"
+      "homepage": "http://masnathan.com"
     }
   ],
   "autoload": {
