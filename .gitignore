@@ -4,4 +4,4 @@ vendor/
 #composer.lock
 jobs/*.js
 
-/test.jpg
+demo/test.jpg
