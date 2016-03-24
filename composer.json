@@ -29,6 +29,6 @@
     "php": ">=5.3"
   },
   "require-dev": {
-    "symfony/var-dumper": "~2.6"
+    "symfony/var-dumper": "~3.0"
   }
 }

@@ -1,22 +1,23 @@
 var page = require('webpage').create();
 
-page.viewportSize = {width: <?= $width ?>, height: <?= $height ?>};
+page.viewportSize = {width: <?php echo $width ?>, height: <?php echo $height ?>};
 
-<?php if (isset($clipWidth) && $clipWidth && isset($clipHeight) && $clipHeight) : ?>
-page.clipRect = {
-    top: 0,
-    left: 0,
-    width: <?= $clipWidth ?>,
-    height: <?= $clipHeight ?>
-};
+<?php if (isset($userAgent)) : ?>
+page.settings.userAgent = '<?php echo $userAgent ?>';
 <?php endif ?>
 
-page.open('<?= $url ?>', function () {
-    /* This will set the page background color white */
-    page.evaluate(function() {
-        document.body.bgColor = '#FFFFFF';
-    });
+<?php if (isset($clipOptions)) : ?>
+page.clipRect = <?php echo json_encode($clipOptions) ?>;
+<?php endif ?>
 
-    page.render('<?= $imageLocation ?>');
+page.open('<?php echo $url ?>', function () {
+    /* This will set the page background color white */
+    <?php if (isset($backgroundColor)) : ?>
+    page.evaluate(function() {
+        document.body.bgColor = '<?php echo $backgroundColor ?>';
+    });
+    <?php endif ?>
+
+    page.render('<?php echo $imageLocation ?>');
     phantom.exit();
 });

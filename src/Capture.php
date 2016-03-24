@@ -6,8 +6,8 @@ namespace Screen;
  * Class Capture
  *
  * @package Screen
- * @author André Filipe
- * @license BSD https://github.com/ariya/phantomjs/blob/master/LICENSE.BSD
+ * @author  André Filipe <andre.r.flip@gmail.com>
+ * @license MIT https://github.com/microweber/screen/blob/master/LICENSE
  */
 class Capture
 {
@@ -47,6 +47,20 @@ class Capture
     protected $clipHeight;
 
     /**
+     * Default body background color is white
+     *
+     * @var string
+     */
+    protected $backgroundColor = '#FFFFFF';
+
+    /**
+     * User Agent String used on the page request
+     *
+     * @var string
+     */
+    protected $userAgentString = '';
+
+    /**
      * Bin directory, should contain the phantomjs file, otherwise it won't work
      *
      * @var string
@@ -63,11 +77,11 @@ class Capture
     /**
      * Jobs directory, directory for temporary files to be written and executed with phantomjs
      *
-     * @var string
+     * @var Jobs
      *
      * @todo Create job files in the temporary dir
      */
-    public $jobsPath;
+    public $jobs;
 
     /**
      * Capture constructor.
@@ -94,11 +108,8 @@ class Capture
 
         $this->binPath = realpath(implode(DIRECTORY_SEPARATOR, array(dirname(__FILE__), '..', 'bin'))) . DIRECTORY_SEPARATOR;
         $this->templatePath = realpath(implode(DIRECTORY_SEPARATOR, array(dirname(__FILE__), '..', 'templates'))) . DIRECTORY_SEPARATOR;
-        $this->jobsPath = implode(DIRECTORY_SEPARATOR, array(dirname(__FILE__), '..', 'jobs'));
-        if (!is_dir($this->jobsPath)) {
-            mkdir($this->jobsPath, 0755);
-        }
-        $this->jobsPath = realpath($this->jobsPath) . DIRECTORY_SEPARATOR;
+
+        $this->jobs = new Jobs();
     }
 
     public function save($imageLocation, $deleteFileIfExists = true)
@@ -107,17 +118,30 @@ class Capture
             'url'           => $this->url,
             'width'         => $this->width,
             'height'        => $this->height,
-            'clipWidth'     => $this->clipWidth,
-            'clipHeight'    => $this->clipHeight,
             'imageLocation' => $imageLocation,
         );
+
+        if ($this->clipWidth && $this->clipHeight) {
+            $data['clipOptions']['width'] = $this->clipWidth;
+            $data['clipOptions']['height'] = $this->clipHeight;
+            $data['clipOptions']['top'] = 0;
+            $data['clipOptions']['left'] = 0;
+        }
+
+        if ($this->backgroundColor) {
+            $data['backgroundColor'] = $this->backgroundColor;
+        }
+
+        if ($this->userAgentString) {
+            $data['userAgent'] = $this->userAgentString;
+        }
 
         if ($deleteFileIfExists && file_exists($imageLocation)) {
             unlink($imageLocation);
         }
 
         $jobName = md5(json_encode($data));
-        $jobPath = $this->jobsPath . $jobName . '.js';
+        $jobPath = $this->jobs->getLocation() . $jobName . '.js';
 
         if (!is_file($jobPath)) {
             // Now we write the code to a js file
@@ -126,7 +150,7 @@ class Capture
         }
 
         $command = sprintf("%sphantomjs %s", $this->binPath, $jobPath);
-        exec(escapeshellcmd($command));
+        echo exec(escapeshellcmd($command));
 
         return file_exists($imageLocation);
     }
@@ -196,6 +220,34 @@ class Capture
     public function setClipHeight($clipHeight)
     {
         $this->clipHeight = $clipHeight;
+
+        return $this;
+    }
+
+    /**
+     * Sets the page body background color
+     *
+     * @param string $backgroundColor Background Color
+     *
+     * @return Capture
+     */
+    public function setBackgroundColor($backgroundColor)
+    {
+        $this->backgroundColor = $backgroundColor;
+
+        return $this;
+    }
+
+    /**
+     * Sets the User Agent String to be used on the page request
+     *
+     * @param string $userAgentString User Agent String
+     *
+     * @return Capture
+     */
+    public function setUserAgentString($userAgentString)
+    {
+        $this->userAgentString = $userAgentString;
 
         return $this;
     }
