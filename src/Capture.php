@@ -115,7 +115,8 @@ class Capture
             'url'           => $this->url,
             'width'         => $this->width,
             'height'        => $this->height,
-            'imageLocation' => $outputPath,
+            // If used on windows the \ char needs to be handled to be used on a js string
+            'imageLocation' => str_replace("\\", "\\\\", $outputPath),
         );
 
         if ($this->clipWidth && $this->clipHeight) {
@@ -147,7 +148,7 @@ class Capture
         }
 
         $command = sprintf("%sphantomjs %s", $this->binPath, $jobPath);
-        echo exec(escapeshellcmd($command));
+        $result = exec(escapeshellcmd($command));
 
         return file_exists($outputPath);
     }
@@ -160,7 +161,7 @@ class Capture
         }
         ob_start();
         extract($args);
-        include_once $this->templatePath . DIRECTORY_SEPARATOR . $templateName . '.php';
+        include $this->templatePath . DIRECTORY_SEPARATOR . $templateName . '.php';
 
         return ob_get_clean();
     }
