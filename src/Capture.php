@@ -2,6 +2,9 @@
 
 namespace Screen;
 
+use Screen\Location\Jobs;
+use Screen\Location\Output;
+
 /**
  * Class Capture
  *
@@ -78,47 +81,41 @@ class Capture
      * Jobs directory, directory for temporary files to be written and executed with phantomjs
      *
      * @var Jobs
-     *
-     * @todo Create job files in the temporary dir
      */
     public $jobs;
 
     /**
-     * Capture constructor.
+     * Base directory to save the output files
      *
-     * @param string $url URL
-     *
-     * @throws \Exception If the url is not valid
+     * @var Output
      */
-    public function __construct($url)
+    public $output;
+
+    /**
+     * Capture constructor.
+     */
+    public function __construct($url = null)
     {
-        // Prepend http:// if the url doesn't contain it
-        if (!stristr($url, 'http://') && !stristr($url, 'https://')) {
-            $url = 'http://' . $url;
+        if ($url) {
+            $this->setUrl($url);
         }
-
-        if (!$url || !filter_var($url, FILTER_VALIDATE_URL)) {
-            throw new \Exception("Invalid URL");
-        }
-
-        $url = str_replace(array(';', '"', '<?'), '', strip_tags($url));
-        $url = str_replace(array('\077', '\''), array(' ', '/'), $url);
-
-        $this->url = $url;
 
         $this->binPath = realpath(implode(DIRECTORY_SEPARATOR, array(dirname(__FILE__), '..', 'bin'))) . DIRECTORY_SEPARATOR;
         $this->templatePath = realpath(implode(DIRECTORY_SEPARATOR, array(dirname(__FILE__), '..', 'templates'))) . DIRECTORY_SEPARATOR;
 
         $this->jobs = new Jobs();
+        $this->output = new Output();
     }
 
     public function save($imageLocation, $deleteFileIfExists = true)
     {
+        $outputPath = $this->output->getLocation() . $imageLocation;
+
         $data = array(
             'url'           => $this->url,
             'width'         => $this->width,
             'height'        => $this->height,
-            'imageLocation' => $imageLocation,
+            'imageLocation' => $outputPath,
         );
 
         if ($this->clipWidth && $this->clipHeight) {
@@ -136,8 +133,8 @@ class Capture
             $data['userAgent'] = $this->userAgentString;
         }
 
-        if ($deleteFileIfExists && file_exists($imageLocation)) {
-            unlink($imageLocation);
+        if ($deleteFileIfExists && file_exists($outputPath)) {
+            unlink($outputPath);
         }
 
         $jobName = md5(json_encode($data));
@@ -152,7 +149,7 @@ class Capture
         $command = sprintf("%sphantomjs %s", $this->binPath, $jobPath);
         echo exec(escapeshellcmd($command));
 
-        return file_exists($imageLocation);
+        return file_exists($outputPath);
     }
 
     private function getTemplateResult($templateName, array $args)
@@ -166,6 +163,30 @@ class Capture
         include_once $this->templatePath . DIRECTORY_SEPARATOR . $templateName . '.php';
 
         return ob_get_clean();
+    }
+
+    /**
+     * Sets the url to screenshot
+     *
+     * @param string $url URL
+     *
+     * @throws \Exception If the url is not valid
+     */
+    public function setUrl($url)
+    {
+        // Prepend http:// if the url doesn't contain it
+        if (!stristr($url, 'http://') && !stristr($url, 'https://')) {
+            $url = 'http://' . $url;
+        }
+
+        if (!$url || !filter_var($url, FILTER_VALIDATE_URL)) {
+            throw new \Exception("Invalid URL");
+        }
+
+        $url = str_replace(array(';', '"', '<?'), '', strip_tags($url));
+        $url = str_replace(array('\077', '\''), array(' ', '/'), $url);
+
+        $this->url = $url;
     }
 
     /**
