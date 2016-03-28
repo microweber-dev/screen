@@ -12,15 +12,9 @@ if ($url == '') {
 }
 
 if (!stristr($url, 'http://') and !stristr($url, 'https://')) {
-   $url = 'http://' . $url;
+    $url = 'http://' . $url;
 
 }
-
-$url_segs = parse_url($url);
-if (!isset($url_segs['host'])) {
-    exit();
-}
-
 
 $here = dirname(__FILE__) . DIRECTORY_SEPARATOR;
 $bin_files = $here . 'bin' . DIRECTORY_SEPARATOR;
@@ -70,10 +64,13 @@ $url = str_replace('<?', '', $url);
 $url = str_replace('<?', '', $url);
 $url = str_replace('\077', ' ', $url);
 
+$url_segs = parse_url($url);
+if (!isset($url_segs['host'])) {
+    exit();
+}
 
 $screen_file = $url_segs['host'] . crc32($url) . '_' . $w . '_' . $h . '.jpg';
 $cache_job = $cache . $screen_file;
-
 
 $refresh = false;
 if (is_file($cache_job)) {
@@ -82,7 +79,6 @@ if (is_file($cache_job)) {
         $refresh = true;
     }
 }
-
 
 $url = escapeshellcmd($url);
 
@@ -127,7 +123,7 @@ if (!is_file($cache_job) or $refresh == true) {
 if (is_file($cache_job)) {
     if ($download != false) {
         $file = $cache_job;
-        $file_name=basename($file);
+        $file_name = basename($file);
         $type = 'image/jpeg';
         header("Content-disposition: attachment; filename={$file_name}");
         header("Content-type: {$type}");
