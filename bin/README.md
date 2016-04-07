@@ -1,11 +1,10 @@
 # Info
 
-In this directory you can find the required binaries of [PhantomJS](http://phantomjs.org).
+In this directory you can find the required binaries of [PhantomJS](http://phantomjs.org) v2.1.1.
 
 You can update them by downloading the binaries from [phantomjs.org](http://phantomjs.org/download.html).
 
 We got all the info from the [Wiki](https://github.com/ariya/phantomjs/wiki/Screen-Capture).
-
 
 # [PhantomJS](http://phantomjs.org) - Scriptable Headless WebKit
 
@@ -36,3 +35,35 @@ PhantomJS ([phantomjs.org](http://phantomjs.org)) is a headless WebKit scriptabl
 PhantomJS is free software/open source, and is distributed under the [BSD license](http://opensource.org/licenses/BSD-3-Clause). It contains third-party code, see the included `third-party.txt` file for the license information on third-party code.
 
 PhantomJS is created and maintained by [Ariya Hidayat](http://ariya.ofilabs.com/about) (Twitter: [@ariyahidayat](http://twitter.com/ariyahidayat)), with the help of [many contributors](https://github.com/ariya/phantomjs/contributors). Follow the official Twitter stream [@PhantomJS](http://twitter.com/PhantomJS) to get the frequent development updates.
+
+## Here is a list of Third Party Software included with PhantomJS, along with the license information.
+
+Third Party Software may impose additional restrictions and it is the user's responsibility to ensure that they have met the licensing requirements of PhantomJS and the relevant license of the Third Party Software they are using.
+
+[**Qt**](http://qt-project.org/)
+**License**: GNU Lesser General Public License (LGPL) version 2.1.
+**Reference**: http://qt-project.org/doc/qt-4.8/lgpl.html.
+
+[**WebKit**](http://www.webkit.org/)
+**License**: GNU Lesser General Public License (LGPL) version 2.1 and BSD.
+**Reference**: http://www.webkit.org/coding/lgpl-license.html and http://www.webkit.org/coding/bsd-license.html.
+
+[**Mongoose**](https://github.com/cesanta/mongoose)
+**License**: MIT
+**Reference**: https://github.com/cesanta/mongoose/commit/abbf27338ef554cce0281ac157aa71a9c1b82a55
+
+[**OpenSSL**](http://www.openssl.org/)
+**License**: OpenSSL License, SSLeay License.
+**Reference**: http://www.openssl.org/source/license.html.
+
+[**Linenoise**](https://github.com/tadmarshall/linenoise)
+**License**: BSD.
+**Reference**: https://github.com/tadmarshall/linenoise/blob/master/linenoise.h.
+
+[**QCommandLine**](http://xf.iksaif.net/dev/qcommandline.html)
+**License**: GNU Lesser General Public License (LGPL) version 2.1.
+**Reference**: http://dev.iksaif.net/projects/qcommandline/repository/revisions/master/entry/COPYING
+
+[**wkhtmlpdf**](http://code.google.com/p/wkhtmltopdf/)
+**License**: GNU Lesser General Public License (LGPL)
+**Reference**: http://code.google.com/p/wkhtmltopdf/
