@@ -30,5 +30,10 @@
     "psr-4": {
       "Screen\\": "src/"
     }
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "chmod +x bin/phantomjs"
+    ]
   }
 }
