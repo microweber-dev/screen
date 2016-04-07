@@ -24,6 +24,14 @@ if (isset($_GET['cliph'])) { // Clip Height
     $screen->setClipHeight(intval($_GET['cliph']));
 }
 
+if (isset($_GET['user-agent'])) { // User Agent String
+    $screen->setUserAgentString($_GET['user-agent']);
+}
+
+if (isset($_GET['bg-color'])) { // Background Color
+    $screen->setBackgroundColor($_GET['bg-color']);
+}
+
 $fileLocation = 'test.jpg';
 $screen->save($fileLocation);
 

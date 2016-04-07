@@ -5,3 +5,4 @@ vendor/
 jobs/*.js
 
 demo/test.jpg
+test.php
