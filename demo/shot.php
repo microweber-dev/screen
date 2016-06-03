@@ -1,5 +1,7 @@
 <?php
 
+// Use the first autoload instead if you don't want to install composer
+//require_once '../autoload.php';
 require_once '../vendor/autoload.php';
 
 if (!isset($_GET['url'])) {
