@@ -57,6 +57,13 @@ class Capture
     protected $backgroundColor = '#FFFFFF';
 
     /**
+     * Image format
+     *
+     * @var string
+     */
+    protected $format = 'jpg';
+
+    /**
      * User Agent String used on the page request
      *
      * @var string
@@ -258,6 +265,52 @@ class Capture
         $this->backgroundColor = $backgroundColor;
 
         return $this;
+    }
+
+    /**
+     * Sets the image format
+     *
+     * @param string $format  'jpg' | 'png'
+     *
+     * @return Capture
+     */
+    public function setFormat($format)
+    {
+        $format = strtolower($format);
+        if (!in_array($format, ['jpg', 'png'])) {
+            throw new Exception(
+                "Invalid image format '{$format}'. " .
+                "Allowed formats are 'jpg' and 'png'"
+            );
+        }
+
+        $this->format = $format;
+
+        return $this;
+    }
+
+    /**
+     * Gets the image format
+     *
+     * @return string
+     */
+    public function getFormat()
+    {
+        return $this->format;
+    }
+
+    /**
+     * Gets the MIME type of resulted image
+     *
+     * @return string
+     */
+    public function getMimeType()
+    {
+        if ($this->format === 'png') {
+            return 'image/png';
+        }
+
+        return 'image/jpeg';
     }
 
     /**
