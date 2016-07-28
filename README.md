@@ -60,9 +60,15 @@ You can also set the User Agent
 $screenCapture->setUserAgentString('Some User Agent String');
 ```
 
+And the resulted image format
+``` php
+// allowed formats are 'jpg' and 'png', default is 'jpg'.
+$screenCapture->setFormat('png');
+```
+
 And most importantly, save the result
 ``` php
-$fileLocation = '/some/dir/test.jpg';
+$fileLocation = '/some/dir/test.' . $screen->getFormat();
 $screen->save($fileLocation);
 ```
 

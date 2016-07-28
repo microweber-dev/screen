@@ -34,10 +34,13 @@ if (isset($_GET['bg-color'])) { // Background Color
     $screen->setBackgroundColor($_GET['bg-color']);
 }
 
-$fileLocation = 'test.jpg';
+if (isset($_GET['format'])) { // Format
+    $screen->setFormat($_GET['format']);
+}
+
+$fileLocation = 'test.' . $screen->getFormat();
 $screen->save($fileLocation);
 
-$type = 'image/jpeg';
-header('Content-Type:' . $type);
+header('Content-Type:' . $screen->getMimeType());
 header('Content-Length: ' . filesize($fileLocation));
 readfile($fileLocation);
