@@ -54,7 +54,7 @@ class Capture
      *
      * @var string
      */
-    protected $backgroundColor = '#FFFFFF';
+    protected $backgroundColor = '';
 
     /**
      * Image format
@@ -135,6 +135,10 @@ class Capture
 
         if ($this->backgroundColor) {
             $data['backgroundColor'] = $this->backgroundColor;
+        } elseif ($this->getFormat() == 'jpg') {
+            // If there is no background color set, and it's a jpeg
+            // we need to set a bg color, otherwise the background will be black
+            $data['backgroundColor'] = '#FFFFFF';
         }
 
         if ($this->userAgentString) {

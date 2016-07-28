@@ -65,6 +65,7 @@ And the resulted image format
 // allowed formats are 'jpg' and 'png', default is 'jpg'.
 $screenCapture->setFormat('png');
 ```
+* If the format is ```jpg``` and the background color is not set, the default value will be ```#FFFFFF```, if ```png``` the default background color will be transparent.
 
 And most importantly, save the result
 ``` php
