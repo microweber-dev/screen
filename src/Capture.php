@@ -145,7 +145,7 @@ class Capture
             $data['userAgent'] = $this->userAgentString;
         }
 
-        if ($deleteFileIfExists && file_exists($outputPath)) {
+        if ($deleteFileIfExists && file_exists($outputPath) && is_writable($outputPath)) {
             unlink($outputPath);
         }
 
