@@ -185,8 +185,8 @@ class Capture
     public function setBinPath($binPath)
     {
         $binPath = rtrim($binPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-        if (!file_exists($binPath . 'phantomjs')) {
-            throw new \Exception("Bin directory should contain the phantomjs file!");
+        if (!file_exists($binPath . 'phantomjs') && !file_exists($binPath . 'phantomjs.exe')) {
+            throw new \Exception("Bin directory should contain phantomjs or phantomjs.exe file!");
         }
         $this->binPath = $binPath;
     }
