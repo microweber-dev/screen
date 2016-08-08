@@ -178,6 +178,20 @@ class Capture
     }
 
     /**
+     * Sets the path to PhantomJS binary, example: "/usr/bin"
+     *
+     * @param string $path
+     */
+    public function setBinPath($binPath)
+    {
+        $binPath = rtrim($binPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        if (!file_exists($binPath . 'phantomjs') && !file_exists($binPath . 'phantomjs.exe')) {
+            throw new \Exception("Bin directory should contain phantomjs or phantomjs.exe file!");
+        }
+        $this->binPath = $binPath;
+    }
+
+    /**
      * Sets the url to screenshot
      *
      * @param string $url URL
