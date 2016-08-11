@@ -286,7 +286,7 @@ class Capture
     {
         $format = strtolower($format);
         if (!in_array($format, ['jpg', 'png'])) {
-            throw new Exception(
+            throw new \Exception(
                 "Invalid image format '{$format}'. " .
                 "Allowed formats are 'jpg' and 'png'"
             );
