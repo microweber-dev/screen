@@ -2,6 +2,8 @@
 
 namespace Screen;
 
+use Screen\Exceptions\TemplateNotFoundException;
+use Screen\Injection\Url;
 use Screen\Location\Jobs;
 use Screen\Location\Output;
 
@@ -168,7 +170,7 @@ class Capture
     {
         $templatePath = $this->templatePath . DIRECTORY_SEPARATOR . $templateName . '.php';
         if (!file_exists($templatePath)) {
-            throw new \Exception("The template {$templateName} does not exist!");
+            throw new TemplateNotFoundException($templateName);
         }
         ob_start();
         extract($args);
@@ -200,19 +202,7 @@ class Capture
      */
     public function setUrl($url)
     {
-        // Prepend http:// if the url doesn't contain it
-        if (!stristr($url, 'http://') && !stristr($url, 'https://')) {
-            $url = 'http://' . $url;
-        }
-
-        if (!$url || !filter_var($url, FILTER_VALIDATE_URL)) {
-            throw new \Exception("Invalid URL");
-        }
-
-        $url = str_replace(array(';', '"', '<?'), '', strip_tags($url));
-        $url = str_replace(array('\077', '\''), array(' ', '/'), $url);
-
-        $this->url = $url;
+        $this->url = new Url($url);
     }
 
     /**
@@ -288,7 +278,7 @@ class Capture
     /**
      * Sets the image format
      *
-     * @param string $format  'jpg' | 'png'
+     * @param string $format 'jpg' | 'png'
      *
      * @return Capture
      */
