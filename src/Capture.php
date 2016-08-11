@@ -3,6 +3,8 @@
 namespace Screen;
 
 use Screen\Exceptions\TemplateNotFoundException;
+use Screen\Image\Types;
+use Screen\Image\Types\Type;
 use Screen\Injection\Url;
 use Screen\Location\Jobs;
 use Screen\Location\Output;
@@ -59,11 +61,11 @@ class Capture
     protected $backgroundColor = '';
 
     /**
-     * Image format
+     * Image Type, default is jpeg
      *
-     * @var string
+     * @var Type
      */
-    protected $format = 'jpg';
+    protected $imageType;
 
     /**
      * User Agent String used on the page request
@@ -120,6 +122,8 @@ class Capture
 
         $this->jobs = new Jobs();
         $this->output = new Output();
+
+        $this->setImageType(Types\Jpg::FORMAT);
     }
 
     public function save($imageLocation, $deleteFileIfExists = true)
@@ -143,7 +147,7 @@ class Capture
 
         if ($this->backgroundColor) {
             $data['backgroundColor'] = $this->backgroundColor;
-        } elseif ($this->getFormat() == 'jpg') {
+        } elseif ($this->getImageType()->getFormat() == Types\Jpg::FORMAT) {
             // If there is no background color set, and it's a jpeg
             // we need to set a bg color, otherwise the background will be black
             $data['backgroundColor'] = '#FFFFFF';
@@ -286,49 +290,27 @@ class Capture
     }
 
     /**
-     * Sets the image format
+     * Sets the image type
      *
-     * @param string $format 'jpg' | 'png'
+     * @param string $type 'jpg', 'png', etc...
      *
      * @return Capture
      */
-    public function setFormat($format)
+    public function setImageType($type)
     {
-        $format = strtolower($format);
-        if (!in_array($format, ['jpg', 'png'])) {
-            throw new \Exception(
-                "Invalid image format '{$format}'. " .
-                "Allowed formats are 'jpg' and 'png'"
-            );
-        }
-
-        $this->format = $format;
+        $this->imageType = Types::getClass($type);
 
         return $this;
     }
 
     /**
-     * Gets the image format
+     * Returns the image type instance
      *
-     * @return string
+     * @return Type
      */
-    public function getFormat()
+    public function getImageType()
     {
-        return $this->format;
-    }
-
-    /**
-     * Gets the MIME type of resulted image
-     *
-     * @return string
-     */
-    public function getMimeType()
-    {
-        if ($this->format === 'png') {
-            return 'image/png';
-        }
-
-        return 'image/jpeg';
+        return $this->imageType;
     }
 
     /**
