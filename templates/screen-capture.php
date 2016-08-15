@@ -10,6 +10,10 @@ page.settings.userAgent = '<?php echo $userAgent ?>';
 page.clipRect = <?php echo json_encode($clipOptions) ?>;
 <?php endif ?>
 
+<?php if (isset($resourceTimeout)) : ?>
+    page.settings.resourceTimeout = '<?php echo $resourceTimeout ?>';
+<?php endif ?>
+
 page.open('<?php echo $url ?>', function () {
     /* This will set the page background color white */
     <?php if (isset($backgroundColor)) : ?>
