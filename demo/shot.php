@@ -35,12 +35,12 @@ if (isset($_GET['bg-color'])) { // Background Color
 }
 
 if (isset($_GET['format'])) { // Format
-    $screen->setImageType($_GET['format']);
+    $screen->setFormat($_GET['format']);
 }
 
-$fileLocation = 'test';
+$fileLocation = 'test.' . $screen->getFormat();
 $screen->save($fileLocation);
 
-header('Content-Type:' . $screen->getImageType()->getMimeType());
-header('Content-Length: ' . filesize($screen->getImageLocation()));
-readfile($screen->getImageLocation());
+header('Content-Type:' . $screen->getMimeType());
+header('Content-Length: ' . filesize($fileLocation));
+readfile($fileLocation);
