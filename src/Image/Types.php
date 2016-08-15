@@ -8,7 +8,7 @@ use Screen\Image\Types\Type;
 
 class Types
 {
-    static protected $typesMap = array(
+    protected static $typesMap = array(
         Jpg::FORMAT => Jpg::class,
         Png::FORMAT => Png::class,
     );
@@ -18,7 +18,7 @@ class Types
      *
      * @return array
      */
-    static public function available()
+    public static function available()
     {
         return array_keys(static::$typesMap);
     }
@@ -30,11 +30,10 @@ class Types
      *
      * @return bool
      */
-    static public function isAvailable($type)
+    public static function isAvailable($type)
     {
         return in_array(strtolower($type), static::available());
     }
-
 
     /**
      * Returns an instance of the requested image type
@@ -44,7 +43,7 @@ class Types
      * @return Type
      * @throws \Exception
      */
-    static public function getClass($type)
+    public static function getClass($type)
     {
         if (!static::isAvailable($type)) {
             throw new \Exception(
