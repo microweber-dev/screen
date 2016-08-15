@@ -10,17 +10,30 @@ page.settings.userAgent = '<?php echo $userAgent ?>';
 page.clipRect = <?php echo json_encode($clipOptions) ?>;
 <?php endif ?>
 
-<?php if (isset($resourceTimeout)) : ?>
-    page.settings.resourceTimeout = '<?php echo $resourceTimeout ?>';
+<?php if (isset($timeout)) : ?>
+page.settings.resourceTimeout = <?php echo $timeout ?>;
 <?php endif ?>
 
 page.open('<?php echo $url ?>', function () {
-    /* This will set the page background color white */
-    <?php if (isset($backgroundColor)) : ?>
-    page.evaluate(function() {
-        document.body.bgColor = '<?php echo $backgroundColor ?>';
-    });
+
+    <?php if (isset($includedJsScripts)) : ?>
+        <?php foreach ($includedJsScripts as $script) : ?>
+            page.injectJs('<?php echo $script ?>');
+        <?php endforeach ?>
     <?php endif ?>
+
+    /* This will set the page background color white */
+    page.evaluate(function() {
+        <?php if (isset($backgroundColor)) : ?>
+            document.body.bgColor = '<?php echo $backgroundColor ?>';
+        <?php endif ?>
+
+        <?php if (isset($includedJsSnippets)) : ?>
+            <?php foreach ($includedJsSnippets as $script) : ?>
+                <?php echo $script ?>
+            <?php endforeach ?>
+        <?php endif ?>
+    });
 
     page.render('<?php echo $imageLocation ?>');
     phantom.exit();

@@ -2,6 +2,12 @@
 
 namespace Screen;
 
+use Screen\Exceptions\InvalidArgumentException;
+use Screen\Exceptions\TemplateNotFoundException;
+use Screen\Image\Types;
+use Screen\Image\Types\Type;
+use Screen\Injection\LocalPath;
+use Screen\Injection\Url;
 use Screen\Location\Jobs;
 use Screen\Location\Output;
 
@@ -57,11 +63,11 @@ class Capture
     protected $backgroundColor = '';
 
     /**
-     * Image format
+     * Image Type, default is jpeg
      *
-     * @var string
+     * @var Type
      */
-    protected $format = 'jpg';
+    protected $imageType;
 
     /**
      * User Agent String used on the page request
@@ -72,9 +78,10 @@ class Capture
 
     /**
      * Sets the timeout period
+     *
      * @var int
      */
-    protected $resourceTimeout = 0;
+    protected $timeout = 0;
 
     /**
      * Bin directory, should contain the phantomjs file, otherwise it won't work
@@ -105,6 +112,27 @@ class Capture
     public $output;
 
     /**
+     * Location where the file was written to
+     *
+     * @var string
+     */
+    protected $imageLocation;
+
+    /**
+     * List of included JS scripts
+     *
+     * @var array
+     */
+    protected $includedJsScripts = array();
+
+    /**
+     * List of included JS snippets
+     *
+     * @var array
+     */
+    protected $includedJsSnippets = array();
+
+    /**
      * Capture constructor.
      */
     public function __construct($url = null)
@@ -118,18 +146,31 @@ class Capture
 
         $this->jobs = new Jobs();
         $this->output = new Output();
+
+        $this->setImageType(Types\Jpg::FORMAT);
     }
 
+    /**
+     * Saves the screenshot to the requested location
+     *
+     * @param string $imageLocation      Image Location
+     * @param bool   $deleteFileIfExists True to delete the file if it exists
+     *
+     * @return bool
+     */
     public function save($imageLocation, $deleteFileIfExists = true)
     {
-        $outputPath = $this->output->getLocation() . $imageLocation;
+        $this->imageLocation = $this->output->getLocation() . $imageLocation;
+
+        if (!pathinfo($this->imageLocation, PATHINFO_EXTENSION)) {
+            $this->imageLocation .= '.' . $this->getImageType()->getFormat();
+        }
 
         $data = array(
             'url'           => $this->url,
             'width'         => $this->width,
             'height'        => $this->height,
-            // If used on windows the \ char needs to be handled to be used on a js string
-            'imageLocation' => str_replace("\\", "\\\\", $outputPath),
+            'imageLocation' => LocalPath::sanitize($this->imageLocation),
         );
 
         if ($this->clipWidth && $this->clipHeight) {
@@ -141,7 +182,7 @@ class Capture
 
         if ($this->backgroundColor) {
             $data['backgroundColor'] = $this->backgroundColor;
-        } elseif ($this->getFormat() == 'jpg') {
+        } elseif ($this->getImageType()->getFormat() == Types\Jpg::FORMAT) {
             // If there is no background color set, and it's a jpeg
             // we need to set a bg color, otherwise the background will be black
             $data['backgroundColor'] = '#FFFFFF';
@@ -151,12 +192,20 @@ class Capture
             $data['userAgent'] = $this->userAgentString;
         }
 
-        if ($this->resourceTimeout) {
-            $data['resourceTimeout'] = $this->resourceTimeout;
+        if ($this->timeout) {
+            $data['timeout'] = $this->timeout;
         }
 
-        if ($deleteFileIfExists && file_exists($outputPath) && is_writable($outputPath)) {
-            unlink($outputPath);
+        if ($this->includedJsScripts) {
+            $data['includedJsScripts'] = $this->includedJsScripts;
+        }
+
+        if ($this->includedJsSnippets) {
+            $data['includedJsSnippets'] = $this->includedJsSnippets;
+        }
+
+        if ($deleteFileIfExists && file_exists($this->imageLocation) && is_writable($this->imageLocation)) {
+            unlink($this->imageLocation);
         }
 
         $jobName = md5(json_encode($data));
@@ -171,14 +220,14 @@ class Capture
         $command = sprintf("%sphantomjs %s", $this->binPath, $jobPath);
         $result = exec(escapeshellcmd($command));
 
-        return file_exists($outputPath);
+        return file_exists($this->imageLocation);
     }
 
     private function getTemplateResult($templateName, array $args)
     {
         $templatePath = $this->templatePath . DIRECTORY_SEPARATOR . $templateName . '.php';
         if (!file_exists($templatePath)) {
-            throw new \Exception("The template {$templateName} does not exist!");
+            throw new TemplateNotFoundException($templateName);
         }
         ob_start();
         extract($args);
@@ -210,19 +259,7 @@ class Capture
      */
     public function setUrl($url)
     {
-        // Prepend http:// if the url doesn't contain it
-        if (!stristr($url, 'http://') && !stristr($url, 'https://')) {
-            $url = 'http://' . $url;
-        }
-
-        if (!$url || !filter_var($url, FILTER_VALIDATE_URL)) {
-            throw new \Exception("Invalid URL");
-        }
-
-        $url = str_replace(array(';', '"', '<?'), '', strip_tags($url));
-        $url = str_replace(array('\077', '\''), array(' ', '/'), $url);
-
-        $this->url = $url;
+        $this->url = new Url($url);
     }
 
     /**
@@ -296,49 +333,37 @@ class Capture
     }
 
     /**
-     * Sets the image format
+     * Sets the image type
      *
-     * @param string $format  'jpg' | 'png'
+     * @param string $type 'jpg', 'png', etc...
      *
      * @return Capture
      */
-    public function setFormat($format)
+    public function setImageType($type)
     {
-        $format = strtolower($format);
-        if (!in_array($format, ['jpg', 'png'])) {
-            throw new Exception(
-                "Invalid image format '{$format}'. " .
-                "Allowed formats are 'jpg' and 'png'"
-            );
-        }
-
-        $this->format = $format;
+        $this->imageType = Types::getClass($type);
 
         return $this;
     }
 
     /**
-     * Gets the image format
+     * Returns the image type instance
      *
-     * @return string
+     * @return Type
      */
-    public function getFormat()
+    public function getImageType()
     {
-        return $this->format;
+        return $this->imageType;
     }
 
     /**
-     * Gets the MIME type of resulted image
+     * Returns the location where the screenshot file was written
      *
      * @return string
      */
-    public function getMimeType()
+    public function getImageLocation()
     {
-        if ($this->format === 'png') {
-            return 'image/png';
-        }
-
-        return 'image/jpeg';
+        return $this->imageLocation;
     }
 
     /**
@@ -357,12 +382,37 @@ class Capture
 
     /**
      * Sets the timeout period
-     * @param int $timeout
-     * @return $this
+     *
+     * @param int $timeout Timeout period
+     *
+     * @return Capture
+     * @throws InvalidArgumentException
      */
-    public function setResourceTimeout($timeout = 30000)
+    public function setTimeout($timeout)
     {
-        $this->resourceTimeout = $timeout;
+        if (!is_numeric($timeout)) {
+            throw new InvalidArgumentException('The timeout value must be a number.');
+        }
+        $this->timeout = $timeout;
+
+        return $this;
+    }
+
+    /**
+     * Adds a JS script or snippet to the screen shot script
+     *
+     * @param string|URL $script Script to include
+     *
+     * @return Capture
+     */
+    public function includeJs($script)
+    {
+        if (is_a($script, Url::class)) {
+            $this->includedJsScripts[] = $script;
+        } else {
+            $this->includedJsSnippets[] = $script;
+        }
+
         return $this;
     }
 }
