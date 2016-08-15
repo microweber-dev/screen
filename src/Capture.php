@@ -5,6 +5,7 @@ namespace Screen;
 use Screen\Exceptions\TemplateNotFoundException;
 use Screen\Image\Types;
 use Screen\Image\Types\Type;
+use Screen\Injection\LocalPath;
 use Screen\Injection\Url;
 use Screen\Location\Jobs;
 use Screen\Location\Output;
@@ -103,6 +104,27 @@ class Capture
     public $output;
 
     /**
+     * Location where the file was written to
+     *
+     * @var string
+     */
+    protected $imageLocation;
+
+    /**
+     * List of included JS scripts
+     *
+     * @var array
+     */
+    protected $includedJsScripts = array();
+
+    /**
+     * List of included JS snippets
+     *
+     * @var array
+     */
+    protected $includedJsSnippets = array();
+
+    /**
      * Capture constructor.
      */
     public function __construct($url = null)
@@ -120,16 +142,27 @@ class Capture
         $this->setImageType(Types\Jpg::FORMAT);
     }
 
+    /**
+     * Saves the screenshot to the requested location
+     *
+     * @param string $imageLocation      Image Location
+     * @param bool   $deleteFileIfExists True to delete the file if it exists
+     *
+     * @return bool
+     */
     public function save($imageLocation, $deleteFileIfExists = true)
     {
-        $outputPath = $this->output->getLocation() . $imageLocation;
+        $this->imageLocation = $this->output->getLocation() . $imageLocation;
+
+        if (!pathinfo($this->imageLocation, PATHINFO_EXTENSION)) {
+            $this->imageLocation .= '.' . $this->getImageType()->getFormat();
+        }
 
         $data = array(
             'url'           => $this->url,
             'width'         => $this->width,
             'height'        => $this->height,
-            // If used on windows the \ char needs to be handled to be used on a js string
-            'imageLocation' => str_replace("\\", "\\\\", $outputPath),
+            'imageLocation' => LocalPath::sanitize($this->imageLocation),
         );
 
         if ($this->clipWidth && $this->clipHeight) {
@@ -151,8 +184,16 @@ class Capture
             $data['userAgent'] = $this->userAgentString;
         }
 
-        if ($deleteFileIfExists && file_exists($outputPath) && is_writable($outputPath)) {
-            unlink($outputPath);
+        if ($this->includedJsScripts) {
+            $data['includedJsScripts'] = $this->includedJsScripts;
+        }
+
+        if ($this->includedJsSnippets) {
+            $data['includedJsSnippets'] = $this->includedJsSnippets;
+        }
+
+        if ($deleteFileIfExists && file_exists($this->imageLocation) && is_writable($this->imageLocation)) {
+            unlink($this->imageLocation);
         }
 
         $jobName = md5(json_encode($data));
@@ -167,7 +208,7 @@ class Capture
         $command = sprintf("%sphantomjs %s", $this->binPath, $jobPath);
         $result = exec(escapeshellcmd($command));
 
-        return file_exists($outputPath);
+        return file_exists($this->imageLocation);
     }
 
     private function getTemplateResult($templateName, array $args)
@@ -304,6 +345,16 @@ class Capture
     }
 
     /**
+     * Returns the location where the screenshot file was written
+     *
+     * @return string
+     */
+    public function getImageLocation()
+    {
+        return $this->imageLocation;
+    }
+
+    /**
      * Sets the User Agent String to be used on the page request
      *
      * @param string $userAgentString User Agent String
@@ -313,6 +364,24 @@ class Capture
     public function setUserAgentString($userAgentString)
     {
         $this->userAgentString = $userAgentString;
+
+        return $this;
+    }
+
+    /**
+     * Adds a JS script or snippet to the screen shot script
+     *
+     * @param string|URL $script Script to include
+     *
+     * @return Capture
+     */
+    public function includeJs($script)
+    {
+        if (is_a($script, Url::class)) {
+            $this->includedJsScripts[] = $script;
+        } else {
+            $this->includedJsSnippets[] = $script;
+        }
 
         return $this;
     }
