@@ -14,7 +14,11 @@ page.clipRect = <?php echo json_encode($clipOptions) ?>;
 page.settings.resourceTimeout = <?php echo $timeout ?>;
 <?php endif ?>
 
-page.open('<?php echo $url ?>', function () {
+page.open('<?php echo $url ?>', function (status) {
+    if (status !== 'success') {
+        console.log('Unable to load the address!');
+        phantom.exit(1);
+    }
 
     <?php if (isset($includedJsScripts)) : ?>
         <?php foreach ($includedJsScripts as $script) : ?>
@@ -22,10 +26,12 @@ page.open('<?php echo $url ?>', function () {
         <?php endforeach ?>
     <?php endif ?>
 
-    /* This will set the page background color white */
     page.evaluate(function() {
         <?php if (isset($backgroundColor)) : ?>
-            document.body.bgColor = '<?php echo $backgroundColor ?>';
+            /* This will set the page background color */
+            if (document && document.body) {
+                document.body.bgColor = '<?php echo $backgroundColor ?>';
+            }
         <?php endif ?>
 
         <?php if (isset($includedJsSnippets)) : ?>
