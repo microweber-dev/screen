@@ -60,18 +60,51 @@ You can also set the User Agent
 $screenCapture->setUserAgentString('Some User Agent String');
 ```
 
-And the resulted image format
+And the resulted image type
 ``` php
-// allowed formats are 'jpg' and 'png', default is 'jpg'.
-$screenCapture->setFormat('png');
+// allowed types are 'jpg' and 'png', default is 'jpg'.
+$screenCapture->setImageType(Screen\Image\Types\Png::FORMAT);
+// or
+$screenCapture->setImageType('png');
 ```
 * If the format is ```jpg``` and the background color is not set, the default value will be ```#FFFFFF```, if ```png``` the default background color will be transparent.
 
 And most importantly, save the result
 ``` php
-$fileLocation = '/some/dir/test.' . $screen->getFormat();
-$screen->save($fileLocation);
+$fileLocation = '/some/dir/test.' . $screen->getImageType()->getFormat();
+$screenCapture->save($fileLocation);
+
+// you don't need to set the file extension
+$fileLocation = '/some/dir/test';
+$screenCapture->save($fileLocation); // Will automatically determine the extension type
+
+echo $screenCapture->getImageLocation(); // --> /some/dir/test.png
 ```
+
+##Injection your own JS into the web page
+
+You can also run your own JS scripts or snippets before the screenshot.
+
+For that we have the method ```includeJs```, here are some usage examples:
+
+``` php
+// Including a remote file
+$jQueryUrl = 'https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js';
+$screenCapture->includeJs(new \Screen\Injection\Url($jQUeryUrl));
+
+// Including a local file
+$localFilePath = 'path/to/my/script.js';
+$screenCapture->includeJs(new \Screen\Injection\LocalPath($localFilePath));
+
+// Using the scripts included on the library
+$screen->includeJs(new \Screen\Injection\Scripts\FacebookHideCookiesPolicy());
+$screen->includeJs(new \Screen\Injection\Scripts\FacebookHideSignUp());
+
+// Using a js snippet
+$screen->includeJs("console.log('This is supa cool!');");
+```
+
+Just use this method before calling ```save(...)```
 
 ##Other configurations
 Additionally to the basic usage, you can set so extra configurations.
