@@ -10,8 +10,8 @@ page.settings.userAgent = '<?php echo $userAgent ?>';
 page.clipRect = <?php echo json_encode($clipOptions) ?>;
 <?php endif ?>
 
-<?php if (isset($resourceTimeout)) : ?>
-    page.settings.resourceTimeout = '<?php echo $resourceTimeout ?>';
+<?php if (isset($timeout)) : ?>
+page.settings.resourceTimeout = <?php echo $timeout ?>;
 <?php endif ?>
 
 page.open('<?php echo $url ?>', function () {

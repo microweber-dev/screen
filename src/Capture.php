@@ -2,6 +2,7 @@
 
 namespace Screen;
 
+use Screen\Exceptions\InvalidArgumentException;
 use Screen\Exceptions\TemplateNotFoundException;
 use Screen\Image\Types;
 use Screen\Image\Types\Type;
@@ -80,7 +81,7 @@ class Capture
      *
      * @var int
      */
-    protected $resourceTimeout = 0;
+    protected $timeout = 0;
 
     /**
      * Bin directory, should contain the phantomjs file, otherwise it won't work
@@ -191,8 +192,8 @@ class Capture
             $data['userAgent'] = $this->userAgentString;
         }
 
-        if ($this->resourceTimeout) {
-            $data['resourceTimeout'] = $this->resourceTimeout;
+        if ($this->timeout) {
+            $data['timeout'] = $this->timeout;
         }
 
         if ($this->includedJsScripts) {
@@ -382,12 +383,17 @@ class Capture
     /**
      * Sets the timeout period
      *
-     * @param int $timeout
-     * @return $this
+     * @param int $timeout Timeout period
+     *
+     * @return Capture
+     * @throws InvalidArgumentException
      */
-    public function setResourceTimeout($timeout = 30000)
+    public function setTimeout($timeout)
     {
-        $this->resourceTimeout = $timeout;
+        if (!is_numeric($timeout)) {
+            throw new InvalidArgumentException('The timeout value must be a number.');
+        }
+        $this->timeout = $timeout;
 
         return $this;
     }
