@@ -37,7 +37,7 @@ class LocalPath extends Url
      *
      * @return string
      */
-    static public function sanitize($path)
+    public static function sanitize($path)
     {
         // If used on windows the \ char needs to be handled to be used on a string
         return str_replace("\\", "\\\\", $path);
