@@ -71,6 +71,12 @@ class Capture
     protected $userAgentString = '';
 
     /**
+     * Sets the timeout period
+     * @var int
+     */
+    protected $resourceTimeout = 0;
+
+    /**
      * Bin directory, should contain the phantomjs file, otherwise it won't work
      *
      * @var string
@@ -143,6 +149,10 @@ class Capture
 
         if ($this->userAgentString) {
             $data['userAgent'] = $this->userAgentString;
+        }
+
+        if ($this->resourceTimeout) {
+            $data['resourceTimeout'] = $this->resourceTimeout;
         }
 
         if ($deleteFileIfExists && file_exists($outputPath) && is_writable($outputPath)) {
@@ -342,6 +352,17 @@ class Capture
     {
         $this->userAgentString = $userAgentString;
 
+        return $this;
+    }
+
+    /**
+     * Sets the timeout period
+     * @param int $timeout
+     * @return $this
+     */
+    public function setResourceTimeout($timeout = 30000)
+    {
+        $this->resourceTimeout = $timeout;
         return $this;
     }
 }
