@@ -38,12 +38,6 @@ if (isset($_GET['format'])) { // Format
     $screen->setImageType($_GET['format']);
 }
 
-$screen->includeJs(new \Screen\Injection\Scripts\FacebookHideCookiesPolicy());
-$screen->includeJs(new \Screen\Injection\Scripts\FacebookHideSignUp());
-$screen->includeJs(new \Screen\Injection\LocalPath('path/to/my/script.js'));
-$screen->includeJs(new \Screen\Injection\Url('https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js'));
-$screen->includeJs("allert('asd');");
-
 $fileLocation = 'test';
 $screen->save($fileLocation);
 
