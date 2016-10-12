@@ -3,6 +3,7 @@
 namespace Screen;
 
 use Screen\Exceptions\InvalidArgumentException;
+use Screen\Exceptions\PhantomJsException;
 use Screen\Exceptions\TemplateNotFoundException;
 use Screen\Image\Types;
 use Screen\Image\Types\Type;
@@ -218,7 +219,14 @@ class Capture
         }
 
         $command = sprintf("%sphantomjs %s", $this->binPath, $jobPath);
-        $result = exec(escapeshellcmd($command));
+
+        // Run the command and ensure it executes successfully
+        $output = [];
+        exec(sprintf("%s 2>&1", escapeshellcmd($command)), $output);
+
+        if (!empty($output)) {
+            throw new PhantomJsException($output);
+        }
 
         return file_exists($this->imageLocation);
     }
