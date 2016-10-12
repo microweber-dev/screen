@@ -221,10 +221,11 @@ class Capture
         $command = sprintf("%sphantomjs %s", $this->binPath, $jobPath);
 
         // Run the command and ensure it executes successfully
+        $returnCode = null;
         $output = [];
-        exec(sprintf("%s 2>&1", escapeshellcmd($command)), $output);
+        exec(sprintf("%s 2>&1", escapeshellcmd($command)), $output, $returnCode);
 
-        if (!empty($output)) {
+        if ($returnCode !== 0) {
             throw new PhantomJsException($output);
         }
 
