@@ -167,7 +167,7 @@ class Capture
         }
 
         $data = array(
-            'url'           => $this->url,
+            'url'           => (string) $this->url,
             'width'         => $this->width,
             'height'        => $this->height,
             'imageLocation' => LocalPath::sanitize($this->imageLocation),
