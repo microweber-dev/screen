@@ -106,6 +106,18 @@ $screen->includeJs("console.log('This is supa cool!');");
 
 Just use this method before calling ```save(...)```
 
+##Passing options to PhantomJS
+
+You can set the options that will be passed to the PhantomJS binary.
+
+``` php
+$screenCapture->setOptions([
+    'ignore-ssl-errors' => 'yes',
+    // '--ignore-ssl-errors' => 'yes', // dashes may be omitted
+]);
+```
+
+
 ##Other configurations
 Additionally to the basic usage, you can set so extra configurations.
 
