@@ -134,6 +134,13 @@ class Capture
     protected $includedJsSnippets = array();
 
     /**
+     * List of options which will be passed to phantomjs
+     *
+     * @var array
+     */
+    protected $options = array();
+
+    /**
      * Capture constructor.
      */
     public function __construct($url = null)
@@ -168,7 +175,7 @@ class Capture
         }
 
         $data = array(
-            'url'           => $this->url,
+            'url'           => (string) $this->url,
             'width'         => $this->width,
             'height'        => $this->height,
             'imageLocation' => LocalPath::sanitize($this->imageLocation),
@@ -218,7 +225,7 @@ class Capture
             file_put_contents($jobPath, $resultString);
         }
 
-        $command = sprintf("%sphantomjs %s", $this->binPath, $jobPath);
+        $command = sprintf("%sphantomjs %s %s", $this->binPath, $this->getOptionsString(), $jobPath);
 
         // Run the command and ensure it executes successfully
         $returnCode = null;
@@ -232,6 +239,13 @@ class Capture
         return file_exists($this->imageLocation);
     }
 
+    /**
+     * @param string $templateName
+     * @param array $args
+     *
+     * @return string
+     * @throws TemplateNotFoundException
+     */
     private function getTemplateResult($templateName, array $args)
     {
         $templatePath = $this->templatePath . DIRECTORY_SEPARATOR . $templateName . '.php';
@@ -243,6 +257,26 @@ class Capture
         include $this->templatePath . DIRECTORY_SEPARATOR . $templateName . '.php';
 
         return ob_get_clean();
+    }
+
+    /**
+     * @return string
+     */
+    private function getOptionsString()
+    {
+        if (empty($this->options)) {
+            return '';
+        }
+
+        $mappedOptions = array_map(function ($value, $key) {
+            if (substr($key, 0, 2) === '--') {
+                $key = substr($key, 2);
+            }
+
+            return sprintf("--%s=%s", $key, $value);
+        }, $this->options, array_keys($this->options));
+
+        return implode(' ', $mappedOptions);
     }
 
     /**
@@ -421,6 +455,20 @@ class Capture
         } else {
             $this->includedJsSnippets[] = $script;
         }
+
+        return $this;
+    }
+
+    /**
+     * Sets the options which will be passed to phantomjs
+     *
+     * @param array $options
+     *
+     * @return $this
+     */
+    public function setOptions($options)
+    {
+        $this->options = $options;
 
         return $this;
     }
