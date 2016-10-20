@@ -11,9 +11,32 @@ Via Composer
 $ composer require microweber/screen
 ```
 
-If on any unix system, you need to make the `bin` executable `chmod +x /path/to/screen/bin/phantomjs`
+The default directory for jobs (`/path/to/screen/jobs`) must be writeble if used.
 
-The directory `/path/to/screen/jobs` must be writeble as well.
+##PhantonJS binaries
+
+As Screen uses the PhantonJS binary to generate screenshots, this needs to be installed. Screen has build-in support for the [PhantonJS installer](https://github.com/jakoch/phantomjs-installer).
+
+###Installation
+Add the following to your `composer.json` file. The binaries will be downloaded in your `vendor/bin` directory. For more info regarding this process, view the  [PhantonJS installer documentation](https://github.com/jakoch/phantomjs-installer#installation).
+```
+ {
+    "require": {
+        "jakoch/phantomjs-installer": "2.1.1-p06"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "PhantomInstaller\\Installer::installPhantomJS"
+        ],
+        "post-update-cmd": [
+            "PhantomInstaller\\Installer::installPhantomJS"
+        ]
+    }
+}
+```
 
 ##Linux requirements
 
@@ -123,7 +146,7 @@ Additionally to the basic usage, you can set so extra configurations.
 
 You can change the where the PhantomJS binary file is.
 ``` php
-$screenCapture->binPath = '/path/to/bin/dir/';
+$screenCapture->setBinPath('/path/to/bin/dir/');
 // This will result in /path/to/bin/dir/phantomjs
 ```
 
