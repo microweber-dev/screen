@@ -24,9 +24,6 @@ Add the following to your `composer.json` file. The binaries will be downloaded 
     "require": {
         "jakoch/phantomjs-installer": "2.1.1-p06"
     },
-    "config": {
-        "bin-dir": "bin"
-    },
     "scripts": {
         "post-install-cmd": [
             "PhantomInstaller\\Installer::installPhantomJS"
