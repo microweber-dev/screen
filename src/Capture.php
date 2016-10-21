@@ -2,6 +2,7 @@
 
 namespace Screen;
 
+use PhantomInstaller\PhantomBinary;
 use Screen\Exceptions\InvalidArgumentException;
 use Screen\Exceptions\PhantomJsException;
 use Screen\Exceptions\TemplateNotFoundException;
@@ -111,11 +112,12 @@ class Capture
     protected $delay = 0;
 
     /**
-     * Bin directory, should contain the phantomjs file, otherwise it won't work
+     * Bin directory, defaults to the BIN from the PhantomInstaller.
+     * Overrulable by using the `setBinPath` method. Directory should contain the `phantonjs` binary
      *
      * @var string
      */
-    public $binPath;
+    protected $binPath = null;
 
     /**
      * Template directory, directory in which will be the js templates files to execute
@@ -175,7 +177,6 @@ class Capture
             $this->setUrl($url);
         }
 
-        $this->binPath = realpath(implode(DIRECTORY_SEPARATOR, array(dirname(__FILE__), '..', 'bin'))) . DIRECTORY_SEPARATOR;
         $this->templatePath = realpath(implode(DIRECTORY_SEPARATOR, array(dirname(__FILE__), '..', 'templates'))) . DIRECTORY_SEPARATOR;
 
         $this->jobs = new Jobs();
@@ -259,7 +260,7 @@ class Capture
             file_put_contents($jobPath, $resultString);
         }
 
-        $command = sprintf("%sphantomjs %s %s", $this->binPath, $this->getOptionsString(), $jobPath);
+        $command = sprintf("%s %s %s", $this->getPhantonBinary(), $this->getOptionsString(), $jobPath);
 
         // Run the command and ensure it executes successfully
         $returnCode = null;
@@ -271,6 +272,22 @@ class Capture
         }
 
         return file_exists($this->imageLocation);
+    }
+
+    /**
+     * @return string
+     */
+    private function getPhantonBinary()
+    {
+        if ($this->binPath !== null) {
+            return sprintf("%sphantomjs", $this->binPath);
+        }
+
+        if (!class_exists(PhantomBinary::class)) {
+            throw new \RuntimeException("Cannot determine phanton binary bin. Did you include the post-{install,update}-cmd script to your composer.json file?");
+        }
+
+        return PhantomBinary::BIN;
     }
 
     /**
@@ -316,7 +333,8 @@ class Capture
     /**
      * Sets the path to PhantomJS binary, example: "/usr/bin"
      *
-     * @param string $path
+     * @param string $binPath
+     * @throws \Exception
      */
     public function setBinPath($binPath)
     {
