@@ -21,19 +21,17 @@
     }
   ],
   "require": {
-    "php": ">=5.3"
+    "php": ">=5.5.9"
   },
   "require-dev": {
-    "symfony/var-dumper": "~3.0"
+    "symfony/var-dumper": "~3.1"
+  },
+  "suggest": {
+    "jakoch/phantomjs-installer": "Installs the PhantomJS binary (Linux, Windows, Mac)"
   },
   "autoload": {
     "psr-4": {
       "Screen\\": "src/"
     }
-  },
-  "scripts": {
-    "post-install-cmd": [
-      "chmod +x bin/phantomjs"
-    ]
   }
 }
