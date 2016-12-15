@@ -41,6 +41,8 @@ page.open('<?php echo $url ?>', function (status) {
         <?php endif ?>
     });
 
-    page.render('<?php echo $imageLocation ?>');
-    phantom.exit();
+    setTimeout(function() {
+            page.render('<?php echo $imageLocation ?>');
+            phantom.exit();
+    }, <?php echo (isset($delay) ? $delay : 0); ?>);
 });
