@@ -103,6 +103,13 @@ class Capture
      * @var int
      */
     protected $timeout = 0;
+    
+     /**
+     * Sets the delay period
+     *
+     * @var int
+     */
+    protected $delay = 0;
 
      /**
      * Sets the delay period
@@ -229,6 +236,10 @@ class Capture
 
         if ($this->timeout) {
             $data['timeout'] = $this->timeout;
+        }
+        
+        if ($this->delay) {
+            $data['delay'] = $this->delay;
         }
 
         if ($this->delay) {
