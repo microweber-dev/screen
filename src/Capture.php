@@ -83,6 +83,13 @@ class Capture
      * @var int
      */
     protected $timeout = 0;
+    
+     /**
+     * Sets the delay period
+     *
+     * @var int
+     */
+    protected $delay = 0;
 
     /**
      * Bin directory, should contain the phantomjs file, otherwise it won't work
@@ -202,6 +209,10 @@ class Capture
 
         if ($this->timeout) {
             $data['timeout'] = $this->timeout;
+        }
+        
+        if ($this->delay) {
+            $data['delay'] = $this->delay;
         }
 
         if ($this->includedJsScripts) {
@@ -441,6 +452,23 @@ class Capture
         return $this;
     }
 
+    /**
+     * Sets the delay period
+     *
+     * @param int $delay Delay period
+     *
+     * @return Capture
+     * @throws InvalidArgumentException
+     */
+    public function setDelay($delay)
+    {
+        if (!is_numeric($delay)) {
+            throw new InvalidArgumentException('The delay value must be a number.');
+        }
+        $this->delay = $delay;
+
+        return $this;
+    }
     /**
      * Adds a JS script or snippet to the screen shot script
      *
