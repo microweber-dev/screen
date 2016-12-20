@@ -29,6 +29,18 @@ class Capture
     protected $url;
 
     /**
+     * dom element top position
+     * @var string
+     */
+    protected $top;
+    
+    /**
+     * dom element left position
+     * @var string
+     */
+    protected $left;
+    
+    /**
      * Width of the page to render
      *
      * @var int
@@ -191,8 +203,8 @@ class Capture
         if ($this->clipWidth && $this->clipHeight) {
             $data['clipOptions']['width'] = $this->clipWidth;
             $data['clipOptions']['height'] = $this->clipHeight;
-            $data['clipOptions']['top'] = 0;
-            $data['clipOptions']['left'] = 0;
+            $data['clipOptions']['top'] = $this->top;
+            $data['clipOptions']['left'] = $this->left;
         }
 
         if ($this->backgroundColor) {
@@ -316,6 +328,34 @@ class Capture
         $this->url = new Url($url);
     }
 
+    /**
+     * Sets the dom top position
+     *
+     * @param int $top dom top position
+     *
+     * @return Capture
+     */
+    public function setTop($top)
+    {
+        $this->top = $top;
+
+        return $this;
+    }
+    
+    /**
+     * Sets the page width
+     *
+     * @param int $left dom left position
+     *
+     * @return Capture
+     */
+    public function setLeft($left)
+    {
+        $this->left = $left;
+
+        return $this;
+    }
+    
     /**
      * Sets the page width
      *
