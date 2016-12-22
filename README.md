@@ -43,6 +43,13 @@ You can also set the browser dimensions
 $screenCapture->setWidth(1200);
 $screenCapture->setHeight(800);
 ```
+
+you can set also DOM Element Position (top, left)
+``` php
+$screenCapture->setTop(100);
+$screenCapture->setLeft(100);
+```
+
 This will output all the page including the content rendered beyond the setted dimensions (e.g.: all the scrollable content), if you want just the content inside those boudaries you need to clip the result
 ``` php
 // You also need to set the width and height.
