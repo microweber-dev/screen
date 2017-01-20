@@ -9,8 +9,8 @@ use Screen\Image\Types\Type;
 class Types
 {
     protected static $typesMap = array(
-        Jpg::FORMAT => Jpg::class,
-        Png::FORMAT => Png::class,
+        Jpg::FORMAT => 'Screen\Image\Types\Jpg',
+        Png::FORMAT => 'Screen\Image\Types\Png',
     );
 
     /**
