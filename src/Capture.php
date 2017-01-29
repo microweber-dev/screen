@@ -251,7 +251,7 @@ class Capture
         }
 
         $jobName = md5(json_encode($data));
-        $jobPath = $this->jobs->getLocation() . rand(1, 1000) . '.js';
+        $jobPath = $this->jobs->getLocation() . $jobName . '.js';
 
         if (!is_file($jobPath)) {
             // Now we write the code to a js file
