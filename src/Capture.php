@@ -33,13 +33,13 @@ class Capture
      * @var string
      */
     protected $top;
-    
+
     /**
      * dom element left position
      * @var string
      */
     protected $left;
-    
+
     /**
      * Width of the page to render
      *
@@ -89,13 +89,20 @@ class Capture
      */
     protected $userAgentString = '';
 
+	/**
+	 * Sets the option to block analytics from being pinged
+	 *
+	 * @var boolean
+	 */
+	protected $blockAnalytics = false;
+
     /**
      * Sets the timeout period
      *
      * @var int
      */
     protected $timeout = 0;
-    
+
      /**
      * Sets the delay period
      *
@@ -222,7 +229,7 @@ class Capture
         if ($this->timeout) {
             $data['timeout'] = $this->timeout;
         }
-        
+
         if ($this->delay) {
             $data['delay'] = $this->delay;
         }
@@ -235,12 +242,16 @@ class Capture
             $data['includedJsSnippets'] = $this->includedJsSnippets;
         }
 
+	    if ($this->blockAnalytics) {
+		    $data['blockAnalytics'] = $this->blockAnalytics;
+	    }
+
         if ($deleteFileIfExists && file_exists($this->imageLocation) && is_writable($this->imageLocation)) {
             unlink($this->imageLocation);
         }
 
         $jobName = md5(json_encode($data));
-        $jobPath = $this->jobs->getLocation() . $jobName . '.js';
+        $jobPath = $this->jobs->getLocation() . rand(1, 1000) . '.js';
 
         if (!is_file($jobPath)) {
             // Now we write the code to a js file
@@ -341,7 +352,7 @@ class Capture
 
         return $this;
     }
-    
+
     /**
      * Sets the page width
      *
@@ -355,7 +366,7 @@ class Capture
 
         return $this;
     }
-    
+
     /**
      * Sets the page width
      *
@@ -439,6 +450,30 @@ class Capture
 
         return $this;
     }
+
+	/**
+	 * Sets the block analytics type
+	 *
+	 * @param boolean
+	 *
+	 * @return Capture
+	 */
+	public function setBlockAnalytics($boolean)
+	{
+		$this->blockAnalytics = $boolean;
+
+		return $this;
+	}
+
+	/**
+	 * Returns the block analytics instance
+	 *
+	 * @return Type
+	 */
+	public function getBlockAnalytics()
+	{
+		return $this->blockAnalytics;
+	}
 
     /**
      * Returns the image type instance
