@@ -14,6 +14,27 @@ page.clipRect = <?php echo json_encode($clipOptions) ?>;
 page.settings.resourceTimeout = <?php echo $timeout ?>;
 <?php endif ?>
 
+<?php if (isset($blockAnalytics) && $blockAnalytics == true) : ?>
+page.onResourceRequested = function(requestData, request) {
+	// Google Analytics Tracking
+	if ((/google-analytics\.com/gi).test(requestData['url'])){
+		request.abort();
+	}
+	// HubSpot Tracking
+	if ((/track.hubspot.com/gi).test(requestData['url'])){
+		request.abort();
+	}
+	// Lucky Orange Tracking
+	if ((/luckyorange\.com/gi).test(requestData['url'])){
+		request.abort();
+	}
+	// Lucky Orange Tracking
+	if ((/livestatserver\.com/gi).test(requestData['url'])){
+		request.abort();
+	}
+};
+<?php endif ?>
+
 page.open('<?php echo $url ?>', function (status) {
     if (status !== 'success') {
         console.log('Unable to load the address!');
