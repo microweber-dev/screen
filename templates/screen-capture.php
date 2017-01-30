@@ -16,10 +16,11 @@ page.settings.resourceTimeout = <?php echo $timeout ?>;
 
 <?php if (isset($blockAnalytics) && $blockAnalytics == true) : ?>
 page.onResourceRequested = function(requestData, request) {
+	// Google Analytics Tracking
 	if ((/google-analytics\.com/gi).test(requestData['url'])){
 		request.abort();
 	}
-	//
+	// HubSpot Tracking
 	if ((/track.hubspot.com/gi).test(requestData['url'])){
 		request.abort();
 	}
