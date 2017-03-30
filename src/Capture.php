@@ -31,12 +31,14 @@ class Capture
 
     /**
      * dom element top position
+     *
      * @var string
      */
     protected $top;
 
     /**
      * dom element left position
+     *
      * @var string
      */
     protected $left;
@@ -90,12 +92,12 @@ class Capture
      */
     protected $userAgentString = '';
 
-	/**
-	 * Sets the option to block analytics from being pinged
-	 *
-	 * @var boolean
-	 */
-	protected $blockAnalytics = false;
+    /**
+     * Sets the option to block analytics from being pinged
+     *
+     * @var boolean
+     */
+    protected $blockAnalytics = false;
 
     /**
      * Sets the timeout period
@@ -103,15 +105,8 @@ class Capture
      * @var int
      */
     protected $timeout = 0;
-    
-     /**
-     * Sets the delay period
-     *
-     * @var int
-     */
-    protected $delay = 0;
 
-     /**
+    /**
      * Sets the delay period
      *
      * @var int
@@ -159,21 +154,21 @@ class Capture
      *
      * @var array
      */
-    protected $includedJsScripts = array();
+    protected $includedJsScripts = [];
 
     /**
      * List of included JS snippets
      *
      * @var array
      */
-    protected $includedJsSnippets = array();
+    protected $includedJsSnippets = [];
 
     /**
      * List of options which will be passed to phantomjs
      *
      * @var array
      */
-    protected $options = array();
+    protected $options = [];
 
     /**
      * Capture constructor.
@@ -184,7 +179,7 @@ class Capture
             $this->setUrl($url);
         }
 
-        $this->templatePath = realpath(implode(DIRECTORY_SEPARATOR, array(dirname(__FILE__), '..', 'templates'))) . DIRECTORY_SEPARATOR;
+        $this->templatePath = realpath(implode(DIRECTORY_SEPARATOR, [dirname(__FILE__), '..', 'templates'])) . DIRECTORY_SEPARATOR;
 
         $this->jobs = new Jobs();
         $this->output = new Output();
@@ -208,12 +203,12 @@ class Capture
             $this->imageLocation .= '.' . $this->getImageType()->getFormat();
         }
 
-        $data = array(
-            'url'           => (string) $this->url,
+        $data = [
+            'url'           => (string)$this->url,
             'width'         => $this->width,
             'height'        => $this->height,
             'imageLocation' => LocalPath::sanitize($this->imageLocation),
-        );
+        ];
 
         if ($this->clipWidth && $this->clipHeight) {
             $data['clipOptions']['width'] = $this->clipWidth;
@@ -237,7 +232,7 @@ class Capture
         if ($this->timeout) {
             $data['timeout'] = $this->timeout;
         }
-        
+
         if ($this->delay) {
             $data['delay'] = $this->delay;
         }
@@ -254,9 +249,9 @@ class Capture
             $data['includedJsSnippets'] = $this->includedJsSnippets;
         }
 
-	    if ($this->blockAnalytics) {
-		    $data['blockAnalytics'] = $this->blockAnalytics;
-	    }
+        if ($this->blockAnalytics) {
+            $data['blockAnalytics'] = $this->blockAnalytics;
+        }
 
         if ($deleteFileIfExists && file_exists($this->imageLocation) && is_writable($this->imageLocation)) {
             unlink($this->imageLocation);
@@ -303,7 +298,7 @@ class Capture
 
     /**
      * @param string $templateName
-     * @param array $args
+     * @param array  $args
      *
      * @return string
      * @throws TemplateNotFoundException
@@ -480,29 +475,29 @@ class Capture
         return $this;
     }
 
-	/**
-	 * Sets the block analytics type
-	 *
-	 * @param boolean
-	 *
-	 * @return Capture
-	 */
-	public function setBlockAnalytics($boolean)
-	{
-		$this->blockAnalytics = $boolean;
+    /**
+     * Sets the block analytics type
+     *
+     * @param boolean
+     *
+     * @return Capture
+     */
+    public function setBlockAnalytics($boolean)
+    {
+        $this->blockAnalytics = $boolean;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Returns the block analytics instance
-	 *
-	 * @return Type
-	 */
-	public function getBlockAnalytics()
-	{
-		return $this->blockAnalytics;
-	}
+    /**
+     * Returns the block analytics instance
+     *
+     * @return Type
+     */
+    public function getBlockAnalytics()
+    {
+        return $this->blockAnalytics;
+    }
 
     /**
      * Returns the image type instance
@@ -573,6 +568,7 @@ class Capture
 
         return $this;
     }
+
     /**
      * Adds a JS script or snippet to the screen shot script
      *

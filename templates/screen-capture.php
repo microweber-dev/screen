@@ -21,7 +21,7 @@ page.onResourceRequested = function(requestData, request) {
 		request.abort();
 	}
 	// HubSpot Tracking
-	if ((/track.hubspot.com/gi).test(requestData['url'])){
+	if ((/track.hubspot\.com/gi).test(requestData['url'])){
 		request.abort();
 	}
 	// Lucky Orange Tracking

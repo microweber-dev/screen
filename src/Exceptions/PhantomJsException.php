@@ -2,7 +2,7 @@
 
 namespace Screen\Exceptions;
 
-class PhantomJsException extends \Exception
+class PhantomJsException extends ScreenException
 {
     public function __construct($message, $code = 0, \Exception $previous = null)
     {

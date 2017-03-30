@@ -24,7 +24,7 @@
     "php": ">=5.5.9"
   },
   "require-dev": {
-    "symfony/var-dumper": "~3.1"
+    "symfony/var-dumper": "^3.2"
   },
   "suggest": {
     "jakoch/phantomjs-installer": "Installs the PhantomJS binary (Linux, Windows, Mac)"

@@ -9,11 +9,11 @@ use Screen\Image\Types\Type;
 
 class Types
 {
-    protected static $typesMap = array(
+    protected static $typesMap = [
         Jpg::FORMAT => 'Screen\Image\Types\Jpg',
         Png::FORMAT => 'Screen\Image\Types\Png',
-        Pdf::FORMAT => 'Screen\Image\Types\Pdf'
-    );
+        Pdf::FORMAT => 'Screen\Image\Types\Pdf',
+    ];
 
     /**
      * Returns all the available image types

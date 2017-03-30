@@ -18,7 +18,6 @@ abstract class Location
      */
     protected $location = '';
 
-
     /**
      * Sets the files location
      *

@@ -17,7 +17,7 @@ class Jobs extends Location
      */
     public function __construct()
     {
-        $defaultLocationPath = implode(DIRECTORY_SEPARATOR, array(dirname(__FILE__), '..', '..', 'jobs'));
+        $defaultLocationPath = implode(DIRECTORY_SEPARATOR, [dirname(__FILE__), '..', '..', 'jobs']);
         if (!is_dir($defaultLocationPath)) {
             mkdir($defaultLocationPath, 0755);
         }

@@ -24,8 +24,8 @@ class Url
             throw new InvalidUrlException($url);
         }
 
-        $url = str_replace(array(';', '"', '<?'), '', strip_tags($url));
-        $url = str_replace(array('\077', '\''), array(' ', '/'), $url);
+        $url = str_replace([';', '"', '<?'], '', strip_tags($url));
+        $url = str_replace(['\077', '\''], [' ', '/'], $url);
 
         $this->src = $url;
     }
