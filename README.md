@@ -1,4 +1,4 @@
-#Screen
+# Screen
 
 Web site screenshot tool based on PHP and [PhantomJS](http://phantomjs.org/ "")
 You can use it to take screenshots for testing or monitoring service
@@ -13,11 +13,11 @@ $ composer require microweber/screen
 
 The default directory for jobs (`/path/to/screen/jobs`) must be writeble if used.
 
-##PhantonJS binaries
+## PhantonJS binaries
 
 As Screen uses the PhantonJS binary to generate screenshots, this needs to be installed. Screen has build-in support for the [PhantonJS installer](https://github.com/jakoch/phantomjs-installer).
 
-###Installation
+### Installation
 
 Add the following to your `composer.json` file. The binaries will be downloaded in your `vendor/bin` directory. For more info regarding this process, view the  [PhantonJS installer documentation](https://github.com/jakoch/phantomjs-installer#installation).
 ```
@@ -41,12 +41,12 @@ And then run
 $ composer require jakoch/phantomjs-installer
 ```
 
-##Linux requirements
+## Linux requirements
 
  * FontConfig -  `apt-get/yum install fontconfig`
  * FreeType - `apt-get/yum install freetype*`
 
-##Usage
+## Usage
 
 With this library you can make use of PhantomJs to screenshot a website.
 
@@ -114,7 +114,7 @@ $screenCapture->save($fileLocation); // Will automatically determine the extensi
 echo $screenCapture->getImageLocation(); // --> /some/dir/test.png
 ```
 
-##Injection your own JS into the web page
+## Injection your own JS into the web page
 
 You can also run your own JS scripts or snippets before the screenshot.
 
@@ -139,7 +139,7 @@ $screen->includeJs("console.log('This is supa cool!');");
 
 Just use this method before calling ```save(...)```
 
-##Passing options to PhantomJS
+## Passing options to PhantomJS
 
 You can set the options that will be passed to the PhantomJS binary.
 
@@ -151,7 +151,7 @@ $screenCapture->setOptions([
 ```
 
 
-##Other configurations
+## Other configurations
 Additionally to the basic usage, you can set so extra configurations.
 
 You can change the where the PhantomJS binary file is.
