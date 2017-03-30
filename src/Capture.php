@@ -241,6 +241,10 @@ class Capture
             $data['delay'] = $this->delay;
         }
 
+        if ($this->delay) {
+            $data['delay'] = $this->delay;
+        }
+
         if ($this->includedJsScripts) {
             $data['includedJsScripts'] = $this->includedJsScripts;
         }
