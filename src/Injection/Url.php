@@ -27,11 +27,17 @@ class Url
         $url = str_replace(array(';', '"', '<?'), '', strip_tags($url));
         $url = str_replace(array('\077', '\''), array(' ', '/'), $url);
 
-        $this->src = $url;
+        $this->src = expandShortUrl($url);
     }
 
     public function __toString()
     {
         return $this->src;
+    }
+
+    public function expandShortUrl($url)
+    {
+        $headers = get_headers($url, 1);
+        return $headers['location'];
     }
 }
