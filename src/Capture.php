@@ -259,7 +259,7 @@ class Capture
             file_put_contents($jobPath, $resultString);
         }
 
-        $command = sprintf("%sphantomjs %s %s", $this->binPath, $this->getOptionsString(), $jobPath);
+        $command = sprintf("%sphantomjs %s %s --no-repl", $this->binPath, $this->getOptionsString(), $jobPath);
 
         // Run the command and ensure it executes successfully
         $returnCode = null;
