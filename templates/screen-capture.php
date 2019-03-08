@@ -1,4 +1,5 @@
 var page = require('webpage').create();
+var fs = require('fs');
 
 page.viewportSize = {width: <?php echo $width ?>, height: <?php echo $height ?>};
 
@@ -35,6 +36,12 @@ page.onResourceRequested = function(requestData, request) {
 };
 <?php endif ?>
 
+<?php if (!empty($cookieJar)) : ?>
+Array.prototype.forEach.call(JSON.parse('<?php echo $cookieJar ?>'), function(x){
+    phantom.addCookie(x);
+});
+<?php endif ?>
+
 page.open('<?php echo $url ?>', function (status) {
     if (status !== 'success') {
         console.log('Unable to load the address!');
@@ -64,6 +71,11 @@ page.open('<?php echo $url ?>', function (status) {
 
     setTimeout(function() {
             page.render('<?php echo $imageLocation ?>');
+
+            <?php if (!empty($cookiesPath)) : ?>
+                fs.write('<?php echo $cookiesPath ?>', JSON.stringify(phantom.cookies), "w");
+            <?php endif ?>
+
             phantom.exit();
     }, <?php echo (isset($delay) ? $delay : 0); ?>);
 });
