@@ -27,7 +27,7 @@ class Url
         $url = str_replace(array(';', '"', '<?'), '', strip_tags($url));
         $url = str_replace(array('\077', '\''), array(' ', '/'), $url);
 
-        $this->src = expandShortUrl($url);
+        $this->src = $this->expandShortUrl($url);
     }
 
     public function __toString()
@@ -37,7 +37,12 @@ class Url
 
     public function expandShortUrl($url)
     {
-        $headers = get_headers($url, 1);
-        return $headers['location'];
+        $headers = get_headers($url, 1) ;
+        if (array_key_exists('location',$headers)) {
+            if ($headers['location'] != '') {
+                return $headers['location'];
+            }
+        }
+        return $url;
     }
 }
