@@ -364,10 +364,14 @@ class Capture
      * @param string $url URL
      *
      * @throws \Exception If the url is not valid
+     *
+     * @return Capture
      */
     public function setUrl($url)
     {
         $this->url = new Url($url);
+
+        return $this;
     }
 
     /**
