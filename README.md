@@ -1,4 +1,4 @@
-#Screen
+# Screen
 
 Web site screenshot tool based on PHP and [PhantomJS](http://phantomjs.org/ "")
 You can use it to take screenshots for testing or monitoring service
@@ -15,12 +15,12 @@ If on any unix system, you need to make the `bin` executable `chmod +x /path/to/
 
 The directory `/path/to/screen/jobs` must be writeble as well.
 
-##Linux requirements
+## Linux requirements
 
  * FontConfig -  `apt-get/yum install fontconfig`
  * FreeType - `apt-get/yum install freetype*`
 
-##Usage
+## Usage
 
 With this library you can make use of PhantomJs to screenshot a website.
 
@@ -88,7 +88,7 @@ $screenCapture->save($fileLocation); // Will automatically determine the extensi
 echo $screenCapture->getImageLocation(); // --> /some/dir/test.png
 ```
 
-##Injection your own JS into the web page
+## Injection your own JS into the web page
 
 You can also run your own JS scripts or snippets before the screenshot.
 
@@ -113,7 +113,7 @@ $screen->includeJs("console.log('This is supa cool!');");
 
 Just use this method before calling ```save(...)```
 
-##Passing options to PhantomJS
+## Passing options to PhantomJS
 
 You can set the options that will be passed to the PhantomJS binary.
 
@@ -125,7 +125,7 @@ $screenCapture->setOptions([
 ```
 
 
-##Other configurations
+## Other configurations
 Additionally to the basic usage, you can set so extra configurations.
 
 You can change the where the PhantomJS binary file is.
