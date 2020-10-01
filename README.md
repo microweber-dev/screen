@@ -1,9 +1,9 @@
-# Screen
+step 1 screen 
 
 Web site screenshot tool based on PHP and [PhantomJS](http://phantomjs.org/ "")
 You can use it to take screenshots for testing or monitoring service
 
-## Install
+step 2 install
 
 Via Composer
 
