@@ -4,26 +4,22 @@ namespace Screen\Image\Types;
 
 abstract class Type
 {
-    const FORMAT = '';
+    public const FORMAT = '';
 
-    const MIME_TYPE = '';
+    public const MIME_TYPE = '';
 
     /**
      * Gets the image format
-     *
-     * @return string
      */
-    public function getFormat()
+    public function getFormat(): string
     {
         return static::FORMAT;
     }
 
     /**
      * Gets the MIME type of resulted image
-     *
-     * @return string
      */
-    public function getMimeType()
+    public function getMimeType(): string
     {
         return static::MIME_TYPE;
     }

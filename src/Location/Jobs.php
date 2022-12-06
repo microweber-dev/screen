@@ -17,7 +17,7 @@ class Jobs extends Location
      */
     public function __construct()
     {
-        $defaultLocationPath = implode(DIRECTORY_SEPARATOR, array(dirname(__FILE__), '..', '..', 'jobs'));
+        $defaultLocationPath = implode(DIRECTORY_SEPARATOR, [__DIR__, '..', '..', 'jobs']);
         if (!is_dir($defaultLocationPath)) {
             mkdir($defaultLocationPath, 0755);
         }
@@ -27,7 +27,7 @@ class Jobs extends Location
     /**
      * Deletes all the job files
      */
-    public function clean()
+    public function clean(): void
     {
         $jobFiles = glob($this->getLocation() . '*.js');
         foreach ($jobFiles as $file) {

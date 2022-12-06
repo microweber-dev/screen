@@ -9,43 +9,29 @@ use Screen\Image\Types\Type;
 
 class Types
 {
-    protected static $typesMap = array(
-        Jpg::FORMAT => 'Screen\Image\Types\Jpg',
-        Png::FORMAT => 'Screen\Image\Types\Png',
-        Pdf::FORMAT => 'Screen\Image\Types\Pdf'
-    );
+    protected static array $typesMap = [Jpg::FORMAT => \Screen\Image\Types\Jpg::class, Png::FORMAT => \Screen\Image\Types\Png::class, Pdf::FORMAT => \Screen\Image\Types\Pdf::class];
 
     /**
      * Returns all the available image types
-     *
-     * @return array
      */
-    public static function available()
+    public static function available(): array
     {
         return array_keys(static::$typesMap);
     }
 
     /**
      * Check if an image type is available
-     *
-     * @param $type
-     *
-     * @return bool
      */
-    public static function isAvailable($type)
+    public static function isAvailable(string $type): bool
     {
         return in_array(strtolower($type), static::available());
     }
 
     /**
      * Returns an instance of the requested image type
-     *
-     * @param string $type Image type
-     *
-     * @return Type
      * @throws \Exception
      */
-    public static function getClass($type)
+    public static function getClass(string $type): Type
     {
         if (!static::isAvailable($type)) {
             throw new \Exception(

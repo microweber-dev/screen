@@ -4,7 +4,7 @@ namespace Screen\Image\Types;
 
 class Pdf extends Type
 {
-    const FORMAT = 'pdf';
+    final public const FORMAT = 'pdf';
 
-    const MIME_TYPE = 'application/pdf';
+    final public const MIME_TYPE = 'application/pdf';
 }

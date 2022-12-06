@@ -24,174 +24,132 @@ class Capture
 {
     /**
      * URL to capture the screen of
-     *
-     * @var string
      */
-    protected $url;
+    protected string $url;
 
     /**
      * dom element top position
-     * @var string
      */
-    protected $top;
+    protected string $top;
 
     /**
      * dom element left position
-     * @var string
      */
-    protected $left;
+    protected string $left;
 
     /**
      * Width of the page to render
-     *
-     * @var int
      */
-    protected $width = 1024;
+    protected int $width = 1024;
 
     /**
      * Height of the page to render
-     *
-     * @var int
      */
-    protected $height = 768;
+    protected int $height = 768;
 
     /**
      * Width of the page to clip
-     *
-     * @var int
      */
-    protected $clipWidth;
+    protected int $clipWidth;
 
     /**
      * Height of the page to clip
-     *
-     * @var int
      */
-    protected $clipHeight;
+    protected int $clipHeight;
 
     /**
      * Default body background color is white
-     *
-     * @var string
      */
-    protected $backgroundColor = '';
+    protected string $backgroundColor = '';
 
     /**
      * Image Type, default is jpeg
-     *
-     * @var Type
      */
-    protected $imageType;
+    protected Type $imageType;
 
     /**
      * User Agent String used on the page request
-     *
-     * @var string
      */
-    protected $userAgentString = '';
+    protected string $userAgentString = '';
 
-	/**
-	 * Sets the option to block analytics from being pinged
-	 *
-	 * @var boolean
-	 */
-	protected $blockAnalytics = false;
+    /**
+     * Sets the option to block analytics from being pinged
+     */
+    protected bool $blockAnalytics = false;
 
     /**
      * Sets the timeout period
-     *
-     * @var int
      */
-    protected $timeout = 0;
+    protected int $timeout = 0;
 
-     /**
+    /**
      * Sets the delay period
-     *
-     * @var int
      */
-    protected $delay = 0;
+    protected int $delay = 0;
 
     /**
      * Bin directory, should contain the phantomjs file, otherwise it won't work
-     *
-     * @var string
      */
-    public $binPath;
+    public string $binPath;
 
     /**
      * Template directory, directory in which will be the js templates files to execute
-     *
-     * @var string
      */
-    public $templatePath;
+    public string $templatePath;
 
     /**
      * Jobs directory, directory for temporary files to be written and executed with phantomjs
-     *
-     * @var Jobs
      */
-    public $jobs;
+    public Jobs $jobs;
 
     /**
      * Base directory to save the output files
-     *
-     * @var Output
      */
-    public $output;
+    public Output $output;
 
     /**
      * Location where the file was written to
-     *
-     * @var string
      */
-    protected $imageLocation;
+    protected string $imageLocation;
 
     /**
      * List of included JS scripts
-     *
-     * @var array
      */
-    protected $includedJsScripts = array();
+    protected array $includedJsScripts = [];
 
     /**
      * List of included JS snippets
-     *
-     * @var array
      */
-    protected $includedJsSnippets = array();
+    protected array $includedJsSnippets = [];
 
     /**
      * List of options which will be passed to phantomjs
-     *
-     * @var array
      */
-    protected $options = array();
+    protected array $options = [];
 
     /**
-    * Sets to keep the cookies between save().
-    *
-    * @var bool
-    */
-    protected $keepCookies;
+     * Sets to keep the cookies between save().
+     */
+    protected bool $keepCookies;
 
     /**
-    * CookieJar to put cookies saved.
-    *
-    * @var CookieJar
-    */
-    public $cookieJar;
+     * CookieJar to put cookies saved.
+     */
+    public CookieJar $cookieJar;
 
     /**
      * Capture constructor.
      */
-    public function __construct($url = null)
+    public function __construct(?string $url = null)
     {
         if ($url) {
             $this->setUrl($url);
         }
 
-        $this->binPath = realpath(implode(DIRECTORY_SEPARATOR, array(dirname(__FILE__), '..', 'bin'))) . DIRECTORY_SEPARATOR;
-        $this->templatePath = realpath(implode(DIRECTORY_SEPARATOR, array(dirname(__FILE__), '..', 'templates'))) . DIRECTORY_SEPARATOR;
+        $this->binPath = realpath(implode(DIRECTORY_SEPARATOR, [__DIR__, '..', 'bin'])) . DIRECTORY_SEPARATOR;
+        $this->templatePath = realpath(
+                implode(DIRECTORY_SEPARATOR, [__DIR__, '..', 'templates'])
+            ) . DIRECTORY_SEPARATOR;
 
         $this->jobs = new Jobs();
         $this->output = new Output();
@@ -203,12 +161,11 @@ class Capture
     /**
      * Saves the screenshot to the requested location
      *
-     * @param string $imageLocation      Image Location
-     * @param bool   $deleteFileIfExists True to delete the file if it exists
-     *
-     * @return bool
+     * @param string $imageLocation Image Location
+     * @param bool $deleteFileIfExists True to delete the file if it exists
+     * @throws PhantomJsException
      */
-    public function save($imageLocation, $deleteFileIfExists = true)
+    public function save(string $imageLocation, bool $deleteFileIfExists = true): bool
     {
         $this->imageLocation = $this->output->getLocation() . $imageLocation;
 
@@ -216,12 +173,12 @@ class Capture
             $this->imageLocation .= '.' . $this->getImageType()->getFormat();
         }
 
-        $data = array(
-            'url'           => (string) $this->url,
-            'width'         => $this->width,
-            'height'        => $this->height,
-            'imageLocation' => LocalPath::sanitize($this->imageLocation),
-        );
+        $data = [
+            'url' => $this->url,
+            'width' => $this->width,
+            'height' => $this->height,
+            'imageLocation' => LocalPath::sanitize($this->imageLocation)
+        ];
 
         if ($this->clipWidth && $this->clipHeight) {
             $data['clipOptions']['width'] = $this->clipWidth;
@@ -258,9 +215,9 @@ class Capture
             $data['includedJsSnippets'] = $this->includedJsSnippets;
         }
 
-	    if ($this->blockAnalytics) {
-		    $data['blockAnalytics'] = $this->blockAnalytics;
-	    }
+        if ($this->blockAnalytics) {
+            $data['blockAnalytics'] = $this->blockAnalytics;
+        }
 
         if ($deleteFileIfExists && file_exists($this->imageLocation) && is_writable($this->imageLocation)) {
             unlink($this->imageLocation);
@@ -271,14 +228,14 @@ class Capture
             $data['cookieJar'] = $this->cookieJar->getCookiesJSON();
         }
 
-        $jobName = md5(json_encode($data));
+        $jobName = md5(json_encode($data, JSON_THROW_ON_ERROR));
         $jobPath = $this->jobs->getLocation() . $jobName . '.js';
 
         // Saves the cookies in the same folder as the jobs.
         $cookiesPath = $this->jobs->getLocation() . $jobName . '.json';
         // Put the path in array. The js will pick up this filepath and save the cookies in it.
-        $data['cookiesPath'] = LocalPath::sanitize($cookiesPath);        
-        
+        $data['cookiesPath'] = LocalPath::sanitize($cookiesPath);
+
         if (!is_file($jobPath)) {
             // Now we write the code to a js file
             $resultString = $this->getTemplateResult('screen-capture', $data);
@@ -305,13 +262,9 @@ class Capture
     }
 
     /**
-     * @param string $templateName
-     * @param array $args
-     *
-     * @return string
      * @throws TemplateNotFoundException
      */
-    private function getTemplateResult($templateName, array $args)
+    private function getTemplateResult(string $templateName, array $args): string
     {
         $templatePath = $this->templatePath . DIRECTORY_SEPARATOR . $templateName . '.php';
         if (!file_exists($templatePath)) {
@@ -324,17 +277,14 @@ class Capture
         return ob_get_clean();
     }
 
-    /**
-     * @return string
-     */
-    private function getOptionsString()
+    private function getOptionsString(): string
     {
         if (empty($this->options)) {
             return '';
         }
 
         $mappedOptions = array_map(function ($value, $key) {
-            if (substr($key, 0, 2) === '--') {
+            if (str_starts_with($key, '--')) {
                 $key = substr($key, 2);
             }
 
@@ -346,12 +296,11 @@ class Capture
 
     /**
      * Sets the path to PhantomJS binary, example: "/usr/bin"
-     *
-     * @param string $path
+     * @throws \Exception
      */
-    public function setBinPath($binPath)
+    public function setBinPath(string $binPath): void
     {
-        $binPath = rtrim($binPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $binPath = rtrim((string)$binPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         if (!file_exists($binPath . 'phantomjs') && !file_exists($binPath . 'phantomjs.exe')) {
             throw new \Exception("Bin directory should contain phantomjs or phantomjs.exe file!");
         }
@@ -360,14 +309,10 @@ class Capture
 
     /**
      * Sets the url to screenshot
-     *
-     * @param string $url URL
-     *
      * @throws \Exception If the url is not valid
      *
-     * @return Capture
      */
-    public function setUrl($url)
+    public function setUrl(string $url): Capture
     {
         $this->url = new Url($url);
 
@@ -378,10 +323,8 @@ class Capture
      * Sets the dom top position
      *
      * @param int $top dom top position
-     *
-     * @return Capture
      */
-    public function setTop($top)
+    public function setTop(int $top): Capture
     {
         $this->top = $top;
 
@@ -392,10 +335,8 @@ class Capture
      * Sets the page width
      *
      * @param int $left dom left position
-     *
-     * @return Capture
      */
-    public function setLeft($left)
+    public function setLeft(int $left): Capture
     {
         $this->left = $left;
 
@@ -406,10 +347,8 @@ class Capture
      * Sets the page width
      *
      * @param int $width Page Width
-     *
-     * @return Capture
      */
-    public function setWidth($width)
+    public function setWidth(int $width): Capture
     {
         $this->width = $width;
 
@@ -420,10 +359,8 @@ class Capture
      * Sets the page height
      *
      * @param int $height Page Height
-     *
-     * @return Capture
      */
-    public function setHeight($height)
+    public function setHeight(int $height): Capture
     {
         $this->height = $height;
 
@@ -434,10 +371,8 @@ class Capture
      * Sets the width to clip
      *
      * @param int $clipWidth Page clip width
-     *
-     * @return Capture
      */
-    public function setClipWidth($clipWidth)
+    public function setClipWidth(int $clipWidth): Capture
     {
         $this->clipWidth = $clipWidth;
 
@@ -448,10 +383,8 @@ class Capture
      * Sets the height to clip
      *
      * @param int $clipHeight Page clip height
-     *
-     * @return Capture
      */
-    public function setClipHeight($clipHeight)
+    public function setClipHeight(int $clipHeight): Capture
     {
         $this->clipHeight = $clipHeight;
 
@@ -462,10 +395,8 @@ class Capture
      * Sets the page body background color
      *
      * @param string $backgroundColor Background Color
-     *
-     * @return Capture
      */
-    public function setBackgroundColor($backgroundColor)
+    public function setBackgroundColor(string $backgroundColor): Capture
     {
         $this->backgroundColor = $backgroundColor;
 
@@ -476,68 +407,53 @@ class Capture
      * Sets the image type
      *
      * @param string $type 'jpg', 'png', etc...
-     *
-     * @return Capture
+     * @throws \Exception
      */
-    public function setImageType($type)
+    public function setImageType(string $type): Capture
     {
         $this->imageType = Types::getClass($type);
 
         return $this;
     }
 
-	/**
-	 * Sets the block analytics type
-	 *
-	 * @param boolean
-	 *
-	 * @return Capture
-	 */
-	public function setBlockAnalytics($boolean)
-	{
-		$this->blockAnalytics = $boolean;
+    /**
+     * Sets the block analytics type
+     */
+    public function setBlockAnalytics(bool $boolean): Capture
+    {
+        $this->blockAnalytics = $boolean;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Returns the block analytics instance
-	 *
-	 * @return Type
-	 */
-	public function getBlockAnalytics()
-	{
-		return $this->blockAnalytics;
-	}
+    /**
+     * Returns the block analytics instance
+     */
+    public function getBlockAnalytics(): Type|bool
+    {
+        return $this->blockAnalytics;
+    }
 
     /**
      * Returns the image type instance
-     *
-     * @return Type
      */
-    public function getImageType()
+    public function getImageType(): Type
     {
         return $this->imageType;
     }
 
     /**
      * Returns the location where the screenshot file was written
-     *
-     * @return string
      */
-    public function getImageLocation()
+    public function getImageLocation(): string
     {
         return $this->imageLocation;
     }
 
     /**
      * Sets the User Agent String to be used on the page request
-     *
-     * @param string $userAgentString User Agent String
-     *
-     * @return Capture
      */
-    public function setUserAgentString($userAgentString)
+    public function setUserAgentString(string $userAgentString): Capture
     {
         $this->userAgentString = $userAgentString;
 
@@ -547,12 +463,9 @@ class Capture
     /**
      * Sets the timeout period
      *
-     * @param int $timeout Timeout period
-     *
-     * @return Capture
      * @throws InvalidArgumentException
      */
-    public function setTimeout($timeout)
+    public function setTimeout(int $timeout): Capture
     {
         if (!is_numeric($timeout)) {
             throw new InvalidArgumentException('The timeout value must be a number.');
@@ -566,11 +479,9 @@ class Capture
      * Sets the delay period
      *
      * @param int $delay Delay period
-     *
-     * @return Capture
      * @throws InvalidArgumentException
      */
-    public function setDelay($delay)
+    public function setDelay(int $delay): Capture
     {
         if (!is_numeric($delay)) {
             throw new InvalidArgumentException('The delay value must be a number.');
@@ -579,14 +490,13 @@ class Capture
 
         return $this;
     }
+
     /**
      * Adds a JS script or snippet to the screen shot script
      *
      * @param string|URL $script Script to include
-     *
-     * @return Capture
      */
-    public function includeJs($script)
+    public function includeJs($script): Capture
     {
         if ($script instanceof Url) {
             $this->includedJsScripts[] = $script;
@@ -599,12 +509,8 @@ class Capture
 
     /**
      * Sets the options which will be passed to phantomjs
-     *
-     * @param array $options
-     *
-     * @return $this
      */
-    public function setOptions($options)
+    public function setOptions(array $options): Capture
     {
         $this->options = $options;
 
@@ -613,12 +519,8 @@ class Capture
 
     /**
      * Sets to keep the cookies between save().
-     *
-     * @param bool $choice
-     *
-     * @return $this
      */
-    public function keepCookiesBetweenSave($choice)
+    public function keepCookiesBetweenSave(bool $choice): Capture
     {
         $this->keepCookies = $choice;
         return $this;
