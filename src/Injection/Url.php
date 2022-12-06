@@ -4,7 +4,7 @@ namespace Screen\Injection;
 
 use Screen\Exceptions\InvalidUrlException;
 
-class Url implements \Stringable
+class Url
 {
     /**
      * URL source
@@ -29,11 +29,6 @@ class Url implements \Stringable
         $url = str_replace(['\077', '\''], [' ', '/'], $url);
 
         $this->src = $this->expandShortUrl($url);
-    }
-
-    public function __toString(): string
-    {
-        return $this->src;
     }
 
     public function expandShortUrl(string $url): string

@@ -130,7 +130,7 @@ class Capture
     /**
      * Sets to keep the cookies between save().
      */
-    protected bool $keepCookies;
+    protected bool $keepCookies = false;
 
     /**
      * CookieJar to put cookies saved.
@@ -314,7 +314,7 @@ class Capture
      */
     public function setUrl(string $url): Capture
     {
-        $this->url = new Url($url);
+        $this->url = $url;
 
         return $this;
     }
