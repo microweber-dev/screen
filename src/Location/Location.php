@@ -13,22 +13,16 @@ abstract class Location
 {
     /**
      * Directory Path
-     *
-     * @var string
      */
-    protected $location = '';
+    protected string $location = '';
 
 
     /**
      * Sets the files location
      *
-     * @param string $path Path to store the files
-     *
      * @throws \Exception If the location does not exist
-     *
-     * @return void
      */
-    public function setLocation($locationPath)
+    public function setLocation(string $locationPath): void
     {
         $locationPath = realpath($locationPath);
         if (!$locationPath || !is_dir($locationPath)) {
@@ -40,10 +34,8 @@ abstract class Location
 
     /**
      * Returns the location path
-     *
-     * @return string
      */
-    public function getLocation()
+    public function getLocation(): string
     {
         return $this->location;
     }

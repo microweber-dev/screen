@@ -3,6 +3,7 @@
 namespace Screen\Injection;
 
 use Screen\Exceptions\FileNotFoundException;
+use Screen\Exceptions\InvalidUrlException;
 
 /**
  * Class LocalPath
@@ -15,11 +16,10 @@ class LocalPath extends Url
     /**
      * LocalPath constructor.
      *
-     * @param string $url Local file path
-     *
      * @throws FileNotFoundException
+     * @throws InvalidUrlException
      */
-    public function __construct($url)
+    public function __construct(string $url)
     {
         $filePath = realpath($url);
 
@@ -28,16 +28,13 @@ class LocalPath extends Url
         }
 
         $this->src = self::sanitize($filePath);
+        parent::__construct($url);
     }
 
     /**
      * Sanitizes a path string
-     *
-     * @param string $path File Path
-     *
-     * @return string
      */
-    public static function sanitize($path)
+    public static function sanitize(string $path): string
     {
         // If used on windows the \ char needs to be handled to be used on a string
         return str_replace("\\", "\\\\", $path);

@@ -4,7 +4,7 @@ namespace Screen\Image\Types;
 
 class Jpg extends Type
 {
-    const FORMAT = 'jpg';
+    final public const FORMAT = 'jpg';
 
-    const MIME_TYPE = 'image/jpeg';
+    final public const MIME_TYPE = 'image/jpeg';
 }

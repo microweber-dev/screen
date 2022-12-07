@@ -8,12 +8,13 @@ class Url
 {
     /**
      * URL source
-     *
-     * @var string
      */
-    protected $src;
+    protected string $src;
 
-    public function __construct($url)
+    /**
+     * @throws InvalidUrlException
+     */
+    public function __construct(string $url)
     {
         // Prepend http:// if the url doesn't contain it
         if (!stristr($url, 'http://') && !stristr($url, 'https://')) {
@@ -24,21 +25,16 @@ class Url
             throw new InvalidUrlException($url);
         }
 
-        $url = str_replace(array(';', '"', '<?'), '', strip_tags($url));
-        $url = str_replace(array('\077', '\''), array(' ', '/'), $url);
+        $url = str_replace([';', '"', '<?'], '', strip_tags($url));
+        $url = str_replace(['\077', '\''], [' ', '/'], $url);
 
         $this->src = $this->expandShortUrl($url);
     }
 
-    public function __toString()
-    {
-        return $this->src;
-    }
-
-    public function expandShortUrl($url)
+    public function expandShortUrl(string $url): string
     {
         $headers = get_headers($url, 1) ;
-        if (array_key_exists('location',$headers)) {
+        if (array_key_exists('location', $headers)) {
             if ($headers['location'] != '') {
                 return $headers['location'];
             }
