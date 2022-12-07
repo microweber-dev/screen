@@ -21,8 +21,7 @@
     }
   ],
   "require": {
-    "php": "^8.1",
-    "rector/rector": "^0.15.0"
+    "php": "^8.1"
   },
   "require-dev": {
     "symfony/var-dumper": "~3.0"
